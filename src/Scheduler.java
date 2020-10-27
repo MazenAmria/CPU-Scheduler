@@ -12,4 +12,8 @@ abstract public class Scheduler {
     }
 
     abstract public void schedule();
+
+    public ArrayList<Record> getProcessesLog() {
+        return processesLog;
+    }
 }

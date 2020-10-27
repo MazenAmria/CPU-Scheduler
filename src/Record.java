@@ -71,4 +71,16 @@ public class Record {
     public void setWaitTime(long waitTime) {
         this.waitTime = waitTime;
     }
+
+    @Override
+    public String toString() {
+        return "Record{" +
+                "processID=" + processID +
+                ", startTime=" + startTime +
+                ", finishTime=" + finishTime +
+                ", turnAround=" + turnAround +
+                ", weightedTurnAround=" + weightedTurnAround +
+                ", waitTime=" + waitTime +
+                '}';
+    }
 }
