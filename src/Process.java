@@ -1,4 +1,5 @@
 public class Process implements Comparable<Process> {
+    public static long ageFactor;
     private long processID;
     private long arrivalTime;
     private long taskDuration; //Burst
@@ -80,6 +81,10 @@ public class Process implements Comparable<Process> {
 
     public void setAge(long age) {
         this.age = age;
+    }
+
+    public long getPriority(){
+        return this.getProcessID() - Process.ageFactor * this.getAge();
     }
 
     @Override

@@ -13,8 +13,15 @@ public class ShortestJobFirstScheduler extends Scheduler {
         Collections.sort(this.processes);
         // Set a cursor to traverse the processes
         int cursor = 0;
+        // Number of finished processes
+        int finished = 0;
+        // Clearing the Ages and Remaining Times for All Procesess
+        for(Process process : this.processes){
+            process.setAge(0);
+            process.setRemainingTime(process.getTaskDuration());
+        }
         // While there are processes to execute
-        while(this.processes.size() > cursor || !this.readyQueue.isEmpty()){
+        while(finished < this.processes.size()){
             // Add new arrival processes to ready queue (depending on their burst)
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
                 // Find The position
@@ -51,6 +58,7 @@ public class ShortestJobFirstScheduler extends Scheduler {
                 this.currentTime += this.readyQueue.get(0).getTaskDuration();
                 // Terminate the process
                 this.readyQueue.remove(0);
+                finished++;
             }else{
                 // If no processes in the queue, skip to the next quantum
                 this.currentTime++;
