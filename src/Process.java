@@ -15,6 +15,7 @@ public class Process {
         this.repeat = repeat;
         this.arrivingInterval = arrivingInterval;
         this.deadLine = deadLine;
+        this.remainingTime = taskDuration;
     }
 
     public long getProcessID() {
