@@ -14,7 +14,7 @@ public class ShortestJobFirstScheduler extends Scheduler {
         // Set a cursor to traverse the processes
         int cursor = 0;
         // While there are processes to execute
-        while(this.processes.size() > cursor){
+        while(this.processes.size() > cursor || !this.readyQueue.isEmpty()){
             // Add new arrival processes to ready queue (depending on their burst)
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
                 // Find The position
@@ -34,8 +34,6 @@ public class ShortestJobFirstScheduler extends Scheduler {
             if(!this.readyQueue.isEmpty()) {
                 // Finish the process
                 this.readyQueue.get(0).setRemainingTime(0);
-                // Skip the execution time
-                this.currentTime += this.readyQueue.get(0).getTaskDuration();
                 // Save process execution in the log
                 this.processesLog.add(new Record(
                         this.readyQueue.get(0).getProcessID(),
@@ -44,6 +42,13 @@ public class ShortestJobFirstScheduler extends Scheduler {
                         this.readyQueue.get(0).getTaskDuration(),
                         this.readyQueue.get(0).getArrivalTime()
                 ));
+                this.cpuLog.add(new Quantum(
+                        this.readyQueue.get(0).getProcessID(),
+                        currentTime,
+                        currentTime + this.readyQueue.get(0).getTaskDuration()
+                ));
+                // Skip the execution time
+                this.currentTime += this.readyQueue.get(0).getTaskDuration();
                 // Terminate the process
                 this.readyQueue.remove(0);
             }else{

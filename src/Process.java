@@ -83,6 +83,20 @@ public class Process implements Comparable<Process> {
     }
 
     @Override
+    public String toString() {
+        return "Process{" +
+                "processID=" + processID +
+                ", arrivalTime=" + arrivalTime +
+                ", taskDuration=" + taskDuration +
+                ", repeat=" + repeat +
+                ", arrivingInterval=" + arrivingInterval +
+                ", deadLine=" + deadLine +
+                ", remainingTime=" + remainingTime +
+                ", age=" + age +
+                '}';
+    }
+
+    @Override
     public int compareTo(Process o) {
         return Long.compare(this.arrivalTime, o.getArrivalTime());
     }
