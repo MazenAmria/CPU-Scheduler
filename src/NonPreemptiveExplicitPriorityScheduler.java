@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class NonPreemptiveExplicitPriorityScheduler extends Scheduler {
-    private long ageFactor;
+    private final long ageFactor;
 
     public NonPreemptiveExplicitPriorityScheduler(ArrayList<Process> processes, long ageFactor) {
         super(processes);
@@ -25,7 +25,7 @@ public class NonPreemptiveExplicitPriorityScheduler extends Scheduler {
         int cursor = 0;
         // Number of finished processes
         int finished = 0;
-        // Clearing the Ages and Remaining Times for All Procesess
+        // Clearing the Ages and Remaining Times for All Processes
         for(Process process : this.processes){
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
