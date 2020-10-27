@@ -8,7 +8,7 @@ public class ShortestJobFirstScheduler extends Scheduler {
     }
 
     @Override
-    public void schedule() {
+    public void run() {
         // Sort The processes by arrival time
         Collections.sort(this.processes);
         // Set a cursor to traverse the processes
@@ -22,6 +22,7 @@ public class ShortestJobFirstScheduler extends Scheduler {
         }
         // While there are processes to execute
         while(finished < this.processes.size()){
+            System.out.println(Thread.currentThread().getId());
             // Add new arrival processes to ready queue (depending on their burst)
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
                 // Find The position

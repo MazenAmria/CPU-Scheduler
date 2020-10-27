@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-abstract public class Scheduler {
+abstract public class Scheduler implements Runnable {
     protected ArrayList<Process> processes;
     protected ArrayList<Process> readyQueue;
     protected ArrayList<Record> processesLog;
@@ -18,8 +18,6 @@ abstract public class Scheduler {
         this.cpuLog = new ArrayList<>();
         this.currentTime = 0;
     }
-
-    abstract public void schedule();
 
     public ArrayList<Record> getProcessesLog() {
         return processesLog;
