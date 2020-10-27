@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 
 abstract public class Scheduler {
-    private ArrayList<Process> processes;
-    private ArrayList<Record> processesLog;
-    private long currentTime;
+    protected ArrayList<Process> processes;
+    protected ArrayList<Process> readyQueue;
+    protected ArrayList<Record> processesLog;
+    protected long currentTime;
 
     public Scheduler(ArrayList<Process> processes) {
         this.processes = processes;
