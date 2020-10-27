@@ -2,10 +2,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class PreempriveExplicitPriorityScheduler extends Scheduler {
+public class PreemptiveExplicitPriorityScheduler extends Scheduler {
     private long ageFactor;
 
-    public PreempriveExplicitPriorityScheduler(ArrayList<Process> processes, long ageFactor) {
+    public PreemptiveExplicitPriorityScheduler(ArrayList<Process> processes, long ageFactor) {
         super(processes);
         this.ageFactor = ageFactor;
     }
