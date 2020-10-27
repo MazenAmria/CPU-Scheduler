@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class ShortestJobFirstScheduler extends Scheduler {
@@ -9,19 +10,28 @@ public class ShortestJobFirstScheduler extends Scheduler {
     @Override
     public void schedule() {
         // Sort The processes by arrival time
-        this.processes.sort(Comparator.comparingLong(Process::getArrivalTime));
+        Collections.sort(this.processes);
         // Set a cursor to traverse the processes
         int cursor = 0;
         // While there are processes to execute
         while(this.processes.size() > cursor){
-            // Add new arrival processes to ready queue
+            // Add new arrival processes to ready queue (depending on their burst)
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
-                this.readyQueue.add(this.processes.get(cursor));
+                // Find The position
+                int index = Collections.binarySearch(
+                        this.readyQueue,
+                        this.processes.get(cursor),
+                        Comparator.comparing(Process::getTaskDuration)
+                );
+                if(index < 0) index = -1 - index;
+                // Insert
+                this.readyQueue.add(
+                        index,
+                        this.processes.get(cursor)
+                );
                 cursor++;
             }
             if(!this.readyQueue.isEmpty()) {
-                // Sorting the queue to get the shortest job
-                this.readyQueue.sort(Comparator.comparingLong(Process::getTaskDuration));
                 // Finish the process
                 this.readyQueue.get(0).setRemainingTime(0);
                 // Skip the execution time

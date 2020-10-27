@@ -1,4 +1,4 @@
-public class Process {
+public class Process implements Comparable<Process> {
     private long processID;
     private long arrivalTime;
     private long taskDuration; //Burst
@@ -80,5 +80,10 @@ public class Process {
 
     public void setAge(long age) {
         this.age = age;
+    }
+
+    @Override
+    public int compareTo(Process o) {
+        return Long.compare(this.arrivalTime, o.getArrivalTime());
     }
 }
