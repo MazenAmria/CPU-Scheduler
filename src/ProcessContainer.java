@@ -29,9 +29,10 @@ public class ProcessContainer {
         this.age = age;
     }
 
-    public long getPriority(){
+    public long getPriority() {
         return this.process.getProcessID() - this.getAge();
     }
+
     public long getProcessID() {
         return this.process.getProcessID();
     }
@@ -39,7 +40,6 @@ public class ProcessContainer {
     public long getArrivalTime() {
         return this.process.getArrivalTime();
     }
-
 
     public long getTaskDuration() {
         return this.process.getTaskDuration();
