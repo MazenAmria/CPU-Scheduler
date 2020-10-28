@@ -10,26 +10,26 @@ public class ShortestJobFirstScheduler extends Scheduler {
     @Override
     public void run() {
         // Sort The processes by arrival time
-        Collections.sort(this.processes);
+        Collections.sort(this.processes, Comparator.comparing(ProcessContainer::getProcess));
         // Set a cursor to traverse the processes
         int cursor = 0;
         // Number of finished processes
         int finished = 0;
         // Clearing the Ages and Remaining Times for All Processes
-        for(Process process : this.processes){
+        for(ProcessContainer process : this.processes){
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
         }
         // While there are processes to execute
         while(finished < this.processes.size()){
-            System.out.println(Thread.currentThread().getId());
+            System.out.println("SJF");
             // Add new arrival processes to ready queue (depending on their burst)
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
                 // Find The position
                 int index = Collections.binarySearch(
                         this.readyQueue,
                         this.processes.get(cursor),
-                        Comparator.comparing(Process::getTaskDuration)
+                        Comparator.comparing(ProcessContainer::getTaskDuration)
                 );
                 if(index < 0) index = -1 - index;
                 // Insert

@@ -1,13 +1,10 @@
 public class Process implements Comparable<Process> {
-    public static long ageFactor;
     private long processID;
     private long arrivalTime;
     private long taskDuration; //Burst
     private long repeat;
     private long arrivingInterval;
     private long deadLine;
-    private long remainingTime;
-    private long age;
 
     public Process(long processID, long arrivalTime, long taskDuration, long repeat, long arrivingInterval, long deadLine) {
         this.processID = processID;
@@ -16,7 +13,6 @@ public class Process implements Comparable<Process> {
         this.repeat = repeat;
         this.arrivingInterval = arrivingInterval;
         this.deadLine = deadLine;
-        this.remainingTime = taskDuration;
     }
 
     public long getProcessID() {
@@ -67,26 +63,6 @@ public class Process implements Comparable<Process> {
         this.deadLine = deadLine;
     }
 
-    public long getRemainingTime() {
-        return remainingTime;
-    }
-
-    public void setRemainingTime(long remainingTime) {
-        this.remainingTime = remainingTime;
-    }
-
-    public long getAge() {
-        return age;
-    }
-
-    public void setAge(long age) {
-        this.age = age;
-    }
-
-    public long getPriority(){
-        return this.getProcessID() - Process.ageFactor * this.getAge();
-    }
-
     @Override
     public String toString() {
         return "Process{" +
@@ -96,8 +72,6 @@ public class Process implements Comparable<Process> {
                 ", repeat=" + repeat +
                 ", arrivingInterval=" + arrivingInterval +
                 ", deadLine=" + deadLine +
-                ", remainingTime=" + remainingTime +
-                ", age=" + age +
                 '}';
     }
 

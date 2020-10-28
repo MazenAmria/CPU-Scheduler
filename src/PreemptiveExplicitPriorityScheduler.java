@@ -20,21 +20,19 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
     @Override
     public void run() {
         // Sort The processes by arrival time
-        Collections.sort(this.processes);
+        Collections.sort(this.processes, Comparator.comparing(ProcessContainer::getProcess));
         // Set a cursor to traverse the processes
         int cursor = 0;
         // Number of finished processes
         int finished = 0;
         // Clearing the Ages and Remaining Times for All Procesess
-        for(Process process : this.processes){
+        for(ProcessContainer process : this.processes){
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
         }
-        // Set The Age Factor (How much does the aging affects priority)
-        Process.ageFactor = ageFactor;
         // While there are processes to execute
         while(finished < this.processes.size()){
-            System.out.println(Thread.currentThread().getId());
+            System.out.println("PEP");
             // Add new arrival processes to ready queue (depending on their burst)
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
                 // Insert
@@ -49,7 +47,7 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
                 cursor++;
             }
             // Sort
-            Collections.sort(this.readyQueue, Comparator.comparingLong(Process::getPriority));
+            Collections.sort(this.readyQueue, Comparator.comparingLong(ProcessContainer::getPriority));
             if(!readyQueue.isEmpty()) {
                 // Making progress in the process
                 this.readyQueue.get(0).setRemainingTime(this.readyQueue.get(0).getRemainingTime() - 1);
@@ -67,8 +65,8 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
                     this.cpuLog.get(this.cpuLog.size() - 1).setFinishTime(this.currentTime + 1);
                 }
                 // Incrementing the Age for all processes
-                for (Process process : this.readyQueue) {
-                    process.setAge(this.currentTime + 1 - process.getArrivalTime());
+                for (ProcessContainer process : this.readyQueue) {
+                    process.setAge(process.getAge() + this.ageFactor);
                 }
                 // Reset the age of the running process
                 this.readyQueue.get(0).setAge(0);

@@ -3,16 +3,23 @@ import java.util.Collections;
 import java.util.Comparator;
 
 abstract public class Scheduler implements Runnable {
-    protected ArrayList<Process> processes;
-    protected ArrayList<Process> readyQueue;
+    protected ArrayList<ProcessContainer> processes;
+    protected ArrayList<ProcessContainer> readyQueue;
     protected ArrayList<Record> processesLog;
     protected ArrayList<Quantum> cpuLog;
     protected long currentTime;
 
     public Scheduler(ArrayList<Process> processes) {
-        this.processes = new ArrayList<>(processes);
+        this.processes = new ArrayList<>();
+        for (Process process : processes){
+            this.processes.add(new ProcessContainer(
+                    process,
+                    process.getTaskDuration(),
+                    0
+            ));
+        }
         // Set the tiebreaking
-        Collections.sort(this.processes, Comparator.comparingLong(Process::getProcessID));
+        Collections.sort(this.processes, Comparator.comparingLong(ProcessContainer::getProcessID));
         this.readyQueue = new ArrayList<>();
         this.processesLog = new ArrayList<>();
         this.cpuLog = new ArrayList<>();
