@@ -7,7 +7,7 @@ abstract public class Scheduler implements Runnable {
     protected ArrayList<ProcessContainer> readyQueue;
     protected ArrayList<Record> processesLog;
     protected ArrayList<Quantum> cpuLog;
-    protected long currentTime;
+    protected double currentTime;
 
     public Scheduler(ArrayList<Process> processes) {
         this.processes = new ArrayList<>();

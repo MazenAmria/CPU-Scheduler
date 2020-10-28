@@ -32,7 +32,6 @@ public class NonPreemptiveExplicitPriorityScheduler extends Scheduler {
         }
         // While there are processes to execute
         while(finished < this.processes.size()){
-            System.out.println("NPEP");
             // Add new arrival processes to ready queue (depending on their burst)
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
                 // Insert
@@ -66,7 +65,7 @@ public class NonPreemptiveExplicitPriorityScheduler extends Scheduler {
                 ));
                 // Update Ages
                 for (ProcessContainer process : this.readyQueue) {
-                    process.setAge(process.getAge() + this.ageFactor * this.readyQueue.get(0).getTaskDuration());
+                    process.setAge((long) (process.getAge() + this.ageFactor * this.readyQueue.get(0).getTaskDuration()));
                 }
                 // Skip the execution time
                 this.currentTime += this.readyQueue.get(0).getTaskDuration();

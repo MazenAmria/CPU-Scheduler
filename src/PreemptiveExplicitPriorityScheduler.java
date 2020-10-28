@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class PreemptiveExplicitPriorityScheduler extends Scheduler {
-    private long ageFactor;
+    private final long ageFactor;
 
     public PreemptiveExplicitPriorityScheduler(ArrayList<Process> processes, long ageFactor) {
         super(processes);
@@ -32,7 +32,6 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
         }
         // While there are processes to execute
         while(finished < this.processes.size()){
-            System.out.println("PEP");
             // Add new arrival processes to ready queue (depending on their burst)
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
                 // Insert
@@ -52,8 +51,8 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
                 // Making progress in the process
                 this.readyQueue.get(0).setRemainingTime(this.readyQueue.get(0).getRemainingTime() - 1);
                 Record record = findRecordByPID(this.processesLog, this.readyQueue.get(0).getProcessID());
-                record.setStartTime(Long.min(currentTime, record.getStartTime()));
-                record.setFinishTime(Long.max(currentTime, record.getFinishTime()));
+                record.setStartTime(Double.min(currentTime, record.getStartTime()));
+                record.setFinishTime(Double.max(currentTime, record.getFinishTime()));
                 // Record the CPU progress
                 if (this.cpuLog.isEmpty() || this.cpuLog.get(this.cpuLog.size() - 1).getProcessID() != this.readyQueue.get(0).getProcessID()) {
                     this.cpuLog.add(new Quantum(
@@ -71,7 +70,7 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
                 // Reset the age of the running process
                 this.readyQueue.get(0).setAge(0);
                 // Delete the process if it finished
-                if (this.readyQueue.get(0).getRemainingTime() == 0) {
+                if (Double.compare(this.readyQueue.get(0).getRemainingTime(), 0) == 0) {
                     // Terminate the process
                     this.readyQueue.remove(0);
                     finished++;

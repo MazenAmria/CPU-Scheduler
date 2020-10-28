@@ -1,9 +1,9 @@
 public class Quantum {
     private long processID;
-    private long startTime;
-    private long finishTime;
+    private double startTime;
+    private double finishTime;
 
-    public Quantum(long processID, long startTime, long finishTime) {
+    public Quantum(long processID, double startTime, double finishTime) {
         this.processID = processID;
         this.startTime = startTime;
         this.finishTime = finishTime;
@@ -17,19 +17,19 @@ public class Quantum {
         this.processID = processID;
     }
 
-    public long getStartTime() {
+    public double getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(long startTime) {
+    public void setStartTime(double startTime) {
         this.startTime = startTime;
     }
 
-    public long getFinishTime() {
+    public double getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(long finishTime) {
+    public void setFinishTime(double finishTime) {
         this.finishTime = finishTime;
     }
 

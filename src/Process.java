@@ -1,12 +1,12 @@
 public class Process implements Comparable<Process> {
     private long processID;
-    private long arrivalTime;
-    private long taskDuration; //Burst
+    private double arrivalTime;
+    private double taskDuration; //Burst
     private long repeat;
     private long arrivingInterval;
     private long deadLine;
 
-    public Process(long processID, long arrivalTime, long taskDuration, long repeat, long arrivingInterval, long deadLine) {
+    public Process(long processID, double arrivalTime, double taskDuration, long repeat, long arrivingInterval, long deadLine) {
         this.processID = processID;
         this.arrivalTime = arrivalTime;
         this.taskDuration = taskDuration;
@@ -23,19 +23,19 @@ public class Process implements Comparable<Process> {
         this.processID = processID;
     }
 
-    public long getArrivalTime() {
+    public double getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(long arrivalTime) {
+    public void setArrivalTime(double arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
-    public long getTaskDuration() {
+    public double getTaskDuration() {
         return taskDuration;
     }
 
-    public void setTaskDuration(long taskDuration) {
+    public void setTaskDuration(double taskDuration) {
         this.taskDuration = taskDuration;
     }
 
@@ -77,6 +77,6 @@ public class Process implements Comparable<Process> {
 
     @Override
     public int compareTo(Process o) {
-        return Long.compare(this.arrivalTime, o.getArrivalTime());
+        return Double.compare(this.arrivalTime, o.getArrivalTime());
     }
 }

@@ -1,9 +1,9 @@
 public class ProcessContainer {
     private Process process;
-    private long remainingTime;
+    private double remainingTime;
     private long age;
 
-    public ProcessContainer(Process process, long remainingTime, long age) {
+    public ProcessContainer(Process process, double remainingTime, long age) {
         this.process = process;
         this.remainingTime = remainingTime;
         this.age = age;
@@ -13,11 +13,11 @@ public class ProcessContainer {
         return process;
     }
 
-    public long getRemainingTime() {
+    public double getRemainingTime() {
         return remainingTime;
     }
 
-    public void setRemainingTime(long remainingTime) {
+    public void setRemainingTime(double remainingTime) {
         this.remainingTime = remainingTime;
     }
 
@@ -37,11 +37,11 @@ public class ProcessContainer {
         return this.process.getProcessID();
     }
 
-    public long getArrivalTime() {
+    public double getArrivalTime() {
         return this.process.getArrivalTime();
     }
 
-    public long getTaskDuration() {
+    public double getTaskDuration() {
         return this.process.getTaskDuration();
     }
 }

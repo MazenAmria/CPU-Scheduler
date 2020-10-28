@@ -22,7 +22,6 @@ public class ShortestJobFirstScheduler extends Scheduler {
         }
         // While there are processes to execute
         while(finished < this.processes.size()){
-            System.out.println("SJF");
             // Add new arrival processes to ready queue (depending on their burst)
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
                 // Find The position
