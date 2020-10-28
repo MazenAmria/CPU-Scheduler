@@ -72,7 +72,7 @@ public class MultiprogrammedWithUniformIOPercentage extends Scheduler {
                     }
                 }
             }else{
-                this.currentTime++;
+                this.currentTime = Math.floor(this.currentTime + 1);
             }
         }
     }

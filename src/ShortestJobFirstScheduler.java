@@ -61,7 +61,7 @@ public class ShortestJobFirstScheduler extends Scheduler {
                 finished++;
             }else{
                 // If no processes in the queue, skip to the next quantum
-                this.currentTime++;
+                this.currentTime = Math.floor(this.currentTime + 1);
             }
         }
     }

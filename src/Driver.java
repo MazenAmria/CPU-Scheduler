@@ -37,8 +37,11 @@ public class Driver {
         scheduler5.run();
         scheduler6.run();
         Scheduler scheduler7 = new MultiprogrammedWithUniformIOPercentage(processes, 80);
+        Scheduler scheduler8 = new RoundRobinScheduler(processes, 2);
+        Thread thread4 = new Thread(scheduler8);
+        thread4.start();
         scheduler7.run();
-        for (Quantum quantum : scheduler7.getCpuLog()) {
+        for (Quantum quantum : scheduler8.getCpuLog()) {
             System.out.println(quantum);
         }
     }

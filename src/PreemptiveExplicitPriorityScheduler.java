@@ -77,7 +77,7 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
                 }
             }
             // Next Quantum
-            this.currentTime++;
+            this.currentTime = Math.floor(this.currentTime + 1);
         }
     }
 }

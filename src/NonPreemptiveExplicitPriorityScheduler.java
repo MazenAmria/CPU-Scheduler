@@ -73,7 +73,7 @@ public class NonPreemptiveExplicitPriorityScheduler extends Scheduler {
                 this.readyQueue.remove(0);
                 finished++;
             }else{
-                this.currentTime++;
+                this.currentTime = Math.floor(this.currentTime + 1);
             }
         }
     }
