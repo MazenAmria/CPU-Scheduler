@@ -12,12 +12,12 @@ public class Driver {
         processes.add(
                 new Process(4, 7, 8, 0, 0, 0)
         );
-        /*processes.add(
+        processes.add(
                 new Process(103, 4, 8, 0, 0, 0)
         );
         processes.add(
                 new Process(104, 3, 3, 0, 0, 0)
-        );*/
+        );
         processes.add(
                 new Process(3, 5, 2, 0, 0, 0)
         );
