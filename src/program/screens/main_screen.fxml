@@ -8,7 +8,7 @@
    <children>
       <ImageView fx:id="image1" fitHeight="338.0" fitWidth="600.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../Downloads/maxresdefault (1).jpg" />
+            <Image url="@../assets/Al-Manara.jpg" />
          </image>
       </ImageView>
    </children>

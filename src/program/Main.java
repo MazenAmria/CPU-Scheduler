@@ -20,7 +20,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Pane root = FXMLLoader.load(FileLoadingScreen.class.getResource("file_loading_screen.fxml"));
+        Pane root = FXMLLoader.load(MainScreen.class.getResource("main_screen.fxml"));
         primaryStage.setTitle("CPU Scheduling Simulator");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
