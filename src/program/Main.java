@@ -1,13 +1,18 @@
 package program;
 
+import com.sun.javafx.fxml.FXMLLoaderHelper;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import program.screens.FileLoadingScreen;
+import program.screens.MainScreen;
 import schedulers.components.Process;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Main extends Application {
