@@ -1,10 +1,28 @@
+package schedulers.algorithms;
+
+import schedulers.*;
+import schedulers.components.Process;
+import schedulers.components.ProcessContainer;
+import schedulers.components.Quantum;
+import schedulers.components.Record;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class ShortestJobFirstScheduler extends Scheduler {
-    public ShortestJobFirstScheduler(ArrayList<Process> processes) {
+public class NonPreemptiveExplicitPriorityScheduler extends Scheduler {
+    private final long ageFactor;
+
+    public NonPreemptiveExplicitPriorityScheduler(ArrayList<Process> processes, long ageFactor) {
         super(processes);
+        this.ageFactor = ageFactor;
+    }
+
+    Record findRecordByPID(ArrayList<Record> records, long PID){
+        for(Record record : records){
+            if(record.getProcessID() == PID) return record;
+        }
+        return null;
     }
 
     @Override
@@ -24,21 +42,20 @@ public class ShortestJobFirstScheduler extends Scheduler {
         while(finished < this.processes.size()){
             // Add new arrival processes to ready queue (depending on their burst)
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
-                // Find The position
-                int index = Collections.binarySearch(
-                        this.readyQueue,
-                        this.processes.get(cursor),
-                        Comparator.comparing(ProcessContainer::getTaskDuration)
-                );
-                if(index < 0) index = -1 - index;
                 // Insert
-                this.readyQueue.add(
-                        index,
-                        this.processes.get(cursor)
-                );
+                this.readyQueue.add(this.processes.get(cursor));
+                this.processesLog.add(new Record(
+                        this.processes.get(cursor).getProcessID(),
+                        Long.MAX_VALUE,
+                        Long.MIN_VALUE,
+                        this.processes.get(cursor).getTaskDuration(),
+                        this.processes.get(cursor).getArrivalTime()
+                ));
                 cursor++;
             }
-            if(!this.readyQueue.isEmpty()) {
+            // Sort
+            Collections.sort(this.readyQueue, Comparator.comparingLong(ProcessContainer::getPriority));
+            if(!readyQueue.isEmpty()) {
                 // Finish the process
                 this.readyQueue.get(0).setRemainingTime(0);
                 // Save process execution in the log
@@ -54,15 +71,19 @@ public class ShortestJobFirstScheduler extends Scheduler {
                         currentTime,
                         currentTime + this.readyQueue.get(0).getTaskDuration()
                 ));
+                // Update Ages
+                for (ProcessContainer process : this.readyQueue) {
+                    process.setAge((long) (process.getAge() + this.ageFactor * this.readyQueue.get(0).getTaskDuration()));
+                }
                 // Skip the execution time
                 this.currentTime += this.readyQueue.get(0).getTaskDuration();
                 // Terminate the process
                 this.readyQueue.remove(0);
                 finished++;
             }else{
-                // If no processes in the queue, skip to the next quantum
                 this.currentTime = Math.floor(this.currentTime + 1);
             }
         }
     }
+
 }

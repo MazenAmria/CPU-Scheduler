@@ -1,3 +1,11 @@
+package schedulers.algorithms;
+
+import schedulers.*;
+import schedulers.components.Process;
+import schedulers.components.ProcessContainer;
+import schedulers.components.Quantum;
+import schedulers.components.Record;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -53,7 +61,7 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
                 Record record = findRecordByPID(this.processesLog, this.readyQueue.get(0).getProcessID());
                 record.setStartTime(Double.min(currentTime, record.getStartTime()));
                 record.setFinishTime(Double.max(currentTime, record.getFinishTime()));
-                // Record the CPU progress
+                // Schedulers.Components.Record the CPU progress
                 if (this.cpuLog.isEmpty() || this.cpuLog.get(this.cpuLog.size() - 1).getProcessID() != this.readyQueue.get(0).getProcessID()) {
                     this.cpuLog.add(new Quantum(
                             this.readyQueue.get(0).getProcessID(),
@@ -76,7 +84,7 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
                     finished++;
                 }
             }
-            // Next Quantum
+            // Next Schedulers.Components.Quantum
             this.currentTime = Math.floor(this.currentTime + 1);
         }
     }

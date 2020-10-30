@@ -1,3 +1,5 @@
+package schedulers.components;
+
 public class Quantum {
     private long processID;
     private double startTime;
@@ -35,7 +37,7 @@ public class Quantum {
 
     @Override
     public String toString() {
-        return "Quantum{" +
+        return "Schedulers.Components.Quantum{" +
                 "processID=" + processID +
                 ", startTime=" + startTime +
                 ", finishTime=" + finishTime +

@@ -1,3 +1,5 @@
+package schedulers.components;
+
 public class ProcessContainer {
     private Process process;
     private double remainingTime;

@@ -1,3 +1,5 @@
+package schedulers.components;
+
 public class Record {
     private long processID;
     private double startTime;
@@ -81,7 +83,7 @@ public class Record {
 
     @Override
     public String toString() {
-        return "Record{" +
+        return "Schedulers.Components.Record{" +
                 "processID=" + processID +
                 ", startTime=" + startTime +
                 ", finishTime=" + finishTime +

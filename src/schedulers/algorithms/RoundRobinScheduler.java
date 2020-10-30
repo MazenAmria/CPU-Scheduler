@@ -1,3 +1,11 @@
+package schedulers.algorithms;
+
+import schedulers.*;
+import schedulers.components.Process;
+import schedulers.components.ProcessContainer;
+import schedulers.components.Quantum;
+import schedulers.components.Record;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

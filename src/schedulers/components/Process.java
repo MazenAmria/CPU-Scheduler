@@ -1,3 +1,5 @@
+package schedulers.components;
+
 public class Process implements Comparable<Process> {
     private long processID;
     private double arrivalTime;
@@ -65,7 +67,7 @@ public class Process implements Comparable<Process> {
 
     @Override
     public String toString() {
-        return "Process{" +
+        return "Schedulers.Components.Process{" +
                 "processID=" + processID +
                 ", arrivalTime=" + arrivalTime +
                 ", taskDuration=" + taskDuration +
