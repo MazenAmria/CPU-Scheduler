@@ -1,13 +1,8 @@
-package application;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 public class ShortestRemainingTimeFirstScheduler extends Scheduler{
-	
-	private ProcessContainer runningProcess;
-	private double timeQuantum = 0 ; 
 
 	public ShortestRemainingTimeFirstScheduler(ArrayList<Process> processes) {
         super(processes);
