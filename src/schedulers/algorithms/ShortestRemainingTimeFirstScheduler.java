@@ -1,8 +1,16 @@
+package schedulers.algorithms;
+
+import schedulers.Scheduler;
+import schedulers.components.Process;
+import schedulers.components.ProcessContainer;
+import schedulers.components.Quantum;
+import schedulers.components.Record;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class ShortestRemainingTimeFirstScheduler extends Scheduler{
+public class ShortestRemainingTimeFirstScheduler extends Scheduler {
 
 	public ShortestRemainingTimeFirstScheduler(ArrayList<Process> processes) {
         super(processes);
@@ -28,7 +36,6 @@ public class ShortestRemainingTimeFirstScheduler extends Scheduler{
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
         }
-        
         // While there are processes to execute
         while(finished < this.processes.size()){
             // Add new arrival processes to ready queue
@@ -65,12 +72,8 @@ public class ShortestRemainingTimeFirstScheduler extends Scheduler{
                     this.readyQueue.remove(0);
                     finished++;
                 }
-                
-                this.currentTime = Math.floor(this.currentTime + 1);
             }
-            else {
-            	this.currentTime = Math.floor(this.currentTime + 1);
-            }  
+            this.currentTime = Math.floor(this.currentTime + 1);
         }
     }
 	

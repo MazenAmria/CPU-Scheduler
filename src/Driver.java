@@ -4,6 +4,8 @@ import schedulers.components.Process;
 import schedulers.components.Quantum;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Driver {
     public static void main(String[] args){
@@ -42,28 +44,25 @@ public class Driver {
         scheduler5.run();
         scheduler6.run();
         Scheduler scheduler7 = new MultiprogrammedWithUniformIOPercentage(processes, 80);
-        Scheduler scheduler8 = new RoundRobinScheduler(processes, 2);
+        Scheduler scheduler8 = new RoundRobinScheduler(processes, Driver.findTimeQuantum(processes));
         Thread thread4 = new Thread(scheduler8);
         thread4.start();
         scheduler7.run();
+        while (thread4.isAlive());
+        System.out.println(Driver.findTimeQuantum(processes));
         for (Quantum quantum : scheduler8.getCpuLog()) {
             System.out.println(quantum);
         }
     }
     
-    public static double FindTimeQuantum(ArrayList<Process> processes) {
-    	double timeQuantum = 0 ; 
-    	//Sort processes based on the task duration parameter 
-    	Collections.sort(processes, new Comparator<Process>() {
-    	        @Override
-    	        public int compare(Process  obj1 , Process  obj2) {
-    	            return Double.compare(obj1.getTaskDuration(), obj2.getTaskDuration());
-    	        }
-    	    });
-    	int numberOfProcessesToIncludeInTQ = (int)Math.ceil(0.8*(double)processes.size());
-    	if(numberOfProcessesToIncludeInTQ == 0) return 0 ; 
-    	timeQuantum = processes.get(numberOfProcessesToIncludeInTQ-1).getTaskDuration();
-    	return timeQuantum ; 
+    public static double findTimeQuantum(ArrayList<Process> processes) {
+    	double timeQuantum = 0;
+    	processes = new ArrayList<>(processes);
+    	// Sort processes based on the task duration parameter
+    	Collections.sort(processes, Comparator.comparingDouble(Process::getTaskDuration));
+    	int numberOfProcessesToIncludeInTQ = (int) Math.ceil(0.8 * (double) processes.size());
+    	if(numberOfProcessesToIncludeInTQ == 0) return 0;
+    	timeQuantum = processes.get(numberOfProcessesToIncludeInTQ - 1).getTaskDuration();
+    	return timeQuantum;
     }
-    
 }

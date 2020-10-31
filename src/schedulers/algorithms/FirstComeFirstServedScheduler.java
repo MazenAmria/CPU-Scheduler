@@ -1,3 +1,11 @@
+package schedulers.algorithms;
+
+import schedulers.Scheduler;
+import schedulers.components.Process;
+import schedulers.components.ProcessContainer;
+import schedulers.components.Quantum;
+import schedulers.components.Record;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,20 +31,10 @@ public class FirstComeFirstServedScheduler extends Scheduler {
         }
         // While there are processes to execute
         while(finished < this.processes.size()){
-            // Add new arrival processes to ready queue (depending on their burst)
+            // Add new arrival processes to ready queue
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
-                // Find The position
-                int index = Collections.binarySearch(
-                        this.readyQueue,
-                        this.processes.get(cursor),
-                        Comparator.comparing(ProcessContainer::getArrivalTime) // to insert the process into the readyQueue based on it's arrival time
-                );
-                if(index < 0) index = -1 - index;
                 // Insert
-                this.readyQueue.add(
-                        index,
-                        this.processes.get(cursor)
-                );
+                this.readyQueue.add(this.processes.get(cursor));
                 cursor++;
             }
             if(!this.readyQueue.isEmpty()) {
@@ -45,15 +43,15 @@ public class FirstComeFirstServedScheduler extends Scheduler {
                 // Save process execution in the log
                 this.processesLog.add(new Record(
                         this.readyQueue.get(0).getProcessID(),
-                        currentTime,
-                        currentTime + this.readyQueue.get(0).getTaskDuration(),
+                        this.currentTime,
+                        this.currentTime + this.readyQueue.get(0).getTaskDuration(),
                         this.readyQueue.get(0).getTaskDuration(),
                         this.readyQueue.get(0).getArrivalTime()
                 ));
                 this.cpuLog.add(new Quantum(
                         this.readyQueue.get(0).getProcessID(),
-                        currentTime,
-                        currentTime + this.readyQueue.get(0).getTaskDuration()
+                        this.currentTime,
+                        this.currentTime + this.readyQueue.get(0).getTaskDuration()
                 ));
                 // Skip the execution time
                 this.currentTime += this.readyQueue.get(0).getTaskDuration();
