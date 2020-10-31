@@ -61,7 +61,7 @@ public class Driver {
     	// Sort processes based on the task duration parameter
     	Collections.sort(processes, Comparator.comparingDouble(Process::getTaskDuration));
     	int numberOfProcessesToIncludeInTQ = (int) Math.ceil(0.8 * (double) processes.size());
-    	if(numberOfProcessesToIncludeInTQ == 0) return 0;
+    	if (numberOfProcessesToIncludeInTQ == 0) return 0;
     	timeQuantum = processes.get(numberOfProcessesToIncludeInTQ - 1).getTaskDuration();
     	return timeQuantum;
     }
