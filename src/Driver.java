@@ -50,4 +50,20 @@ public class Driver {
             System.out.println(quantum);
         }
     }
+    
+    public static double FindTimeQuantum(ArrayList<Process> processes) {
+    	double timeQuantum = 0 ; 
+    	//Sort processes based on the task duration parameter 
+    	Collections.sort(processes, new Comparator<Process>() {
+    	        @Override
+    	        public int compare(Process  obj1 , Process  obj2) {
+    	            return Double.compare(obj1.getTaskDuration(), obj2.getTaskDuration());
+    	        }
+    	    });
+    	int numberOfProcessesToIncludeInTQ = (int)Math.ceil(0.8*(double)processes.size());
+    	if(numberOfProcessesToIncludeInTQ == 0) return 0 ; 
+    	timeQuantum = processes.get(numberOfProcessesToIncludeInTQ-1).getTaskDuration();
+    	return timeQuantum ; 
+    }
+    
 }
