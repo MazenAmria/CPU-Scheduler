@@ -1,6 +1,6 @@
 package schedulers.components;
 
-public class Quantum {
+public class Quantum implements Visualisable {
     private long processID;
     private double startTime;
     private double finishTime;

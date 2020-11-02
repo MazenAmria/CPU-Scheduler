@@ -1,6 +1,6 @@
 package schedulers.components;
 
-public class Record {
+public class Record implements Visualisable {
     private long processID;
     private double startTime;
     private double finishTime;
@@ -55,6 +55,22 @@ public class Record {
         this.turnAround = finishTime - this.arrivalTime;
         this.weightedTurnAround = this.turnAround / (double) this.taskDuration;
         this.waitTime = this.turnAround - this.taskDuration;
+    }
+
+    public double getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(double arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public double getTaskDuration() {
+        return taskDuration;
+    }
+
+    public void setTaskDuration(double taskDuration) {
+        this.taskDuration = taskDuration;
     }
 
     public double getTurnAround() {
