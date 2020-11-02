@@ -33,8 +33,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Pane fileLoadingScreen = FXMLLoader.load(getClass().getResource("screens/file_loading_screen.fxml"));
         Pane mainScreen = FXMLLoader.load(getClass().getResource("screens/main_screen.fxml"));
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.setResizable(true);
+        //primaryStage.initStyle(StageStyle.UNDECORATED);
+        //primaryStage.setResizable(true);
         Button loadFile = (Button) getElementById(fileLoadingScreen, "load_file");
         Button browse = (Button) getElementById(fileLoadingScreen, "browse");
         TextField fileName = (TextField) getElementById(fileLoadingScreen, "file_name");
@@ -74,11 +74,11 @@ public class Main extends Application {
                         }
                     }
                     readFile(file[0]);
+                    primaryStage.widthProperty().removeListener(widthListener);
+                    primaryStage.heightProperty().removeListener(heightListener);
                     primaryStage.setScene(
                         new Scene(mainScreen, 600, 400)
                     );
-                    primaryStage.widthProperty().removeListener(widthListener);
-                    primaryStage.heightProperty().removeListener(heightListener);
                 }
         );
         primaryStage.setScene(new Scene(fileLoadingScreen, 600, 400));
