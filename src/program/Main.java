@@ -74,8 +74,6 @@ public class Main extends Application {
                         }
                     }
                     readFile(file[0]);
-                    primaryStage.widthProperty().removeListener(widthListener);
-                    primaryStage.heightProperty().removeListener(heightListener);
                     primaryStage.setScene(
                         new Scene(mainScreen, 600, 400)
                     );
