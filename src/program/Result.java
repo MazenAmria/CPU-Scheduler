@@ -2,9 +2,7 @@ package program;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -42,12 +40,13 @@ public class Result {
         stage.setScene(new Scene(result, 900, 400));
         stage.show();
         // Averages Panel...
-        VBox averages = FXMLLoader.load(getClass().getResource("screens/averages.fxml"));
-        AnchorPane.setRightAnchor(averages, 650.0);
-        AnchorPane.setLeftAnchor(averages, 0.0);
-        AnchorPane.setTopAnchor(averages, 0.0);
-        AnchorPane.setBottomAnchor(averages, 0.0);
-        result.getChildren().add(averages);
+        VBox container = FXMLLoader.load(getClass().getResource("screens/averages.fxml"));
+        AnchorPane.setRightAnchor(container, 650.0);
+        AnchorPane.setLeftAnchor(container, 0.0);
+        AnchorPane.setTopAnchor(container, 0.0);
+        AnchorPane.setBottomAnchor(container, 0.0);
+        result.getChildren().add(container);
+        VBox averages = (VBox) Main.getElementById(container, "averages");
         // Gantt Chart Panel...
         Pane ganttChart = FXMLLoader.load(getClass().getResource("screens/gantt_chart.fxml"));
         ganttChart.setStyle("-fx-background-color: #FFFFFF;");
@@ -72,11 +71,19 @@ public class Result {
         double weightedTurnAround = 0;
         double waitTime = 0;
         // Toggle Buttons...
-        HBox choose = (HBox) Main.getElementById(averages, "choose");
+        VBox lower = (VBox) Main.getElementById(container, "lower");
+        HBox choose = (HBox) Main.getElementById(lower, "choose");
         ToggleButton processes = (ToggleButton) Main.getElementById(choose, "processes");
         processes.setSelected(true);
         ToggleButton cpu = (ToggleButton) Main.getElementById(choose, "cpu");
         cpu.setSelected(false);
+        HBox scale = (HBox) Main.getElementById(lower, "scale");
+        Slider slider = (Slider) Main.getElementById(scale, "slider");
+        slider.setMax(4.00);
+        slider.setMin(0.05);
+        slider.setValue(1.00);
+        TextField value = (TextField) Main.getElementById(scale, "value");
+        value.setText("1.00");
         // Waiting for the scheduler to finish scheduling
         while(thread.isAlive());
         // Continue building the UI and filling the results
@@ -99,13 +106,27 @@ public class Result {
         waitTime /= scheduler.numOfProcesses;
         // Setting the averages...
         GridPane avgs = (GridPane) Main.getElementById(averages, "grid");
-        avgs.add(new Text(String.format("%.2f", startTime)), 1, 0);
-        avgs.add(new Text(String.format("%.2f", finishTime)), 1, 1);
-        avgs.add(new Text(String.format("%.2f", arrivalTime)), 1, 2);
-        avgs.add(new Text(String.format("%.2f", taskDuration)), 1, 3);
-        avgs.add(new Text(String.format("%.2f", turnAround)), 1, 4);
-        avgs.add(new Text(String.format("%.2f", weightedTurnAround)), 1, 5);
-        avgs.add(new Text(String.format("%.2f", waitTime)), 1, 6);
+        Text tx1 = new Text(String.format("%.2f", startTime));
+        tx1.setFill(Color.WHITE);
+        avgs.add(tx1, 1, 0);
+        Text tx2 = new Text(String.format("%.2f", finishTime));
+        tx2.setFill(Color.WHITE);
+        avgs.add(tx2, 1, 1);
+        Text tx3 = new Text(String.format("%.2f", arrivalTime));
+        tx3.setFill(Color.WHITE);
+        avgs.add(tx3, 1, 2);
+        Text tx4 = new Text(String.format("%.2f", taskDuration));
+        tx4.setFill(Color.WHITE);
+        avgs.add(tx4, 1, 3);
+        Text tx5 = new Text(String.format("%.2f", turnAround));
+        tx5.setFill(Color.WHITE);
+        avgs.add(tx5, 1, 4);
+        Text tx6 = new Text(String.format("%.2f", weightedTurnAround));
+        tx6.setFill(Color.WHITE);
+        avgs.add(tx6, 1, 5);
+        Text tx7 = new Text(String.format("%.2f", waitTime));
+        tx7.setFill(Color.WHITE);
+        avgs.add(tx7, 1, 6);
         // Calculate time interval...
         this.finalTime = 0;
         this.beginTime = Double.MAX_VALUE;
@@ -123,6 +144,35 @@ public class Result {
         for (Visualisable v : visualisables[0]) {
             map(ganttChart, v);
         }
+        // Changing the Scale...
+        slider.setOnMouseDragged(mouseEvent -> {
+            this.hScale = slider.getValue();
+            value.setText(String.format("%.2f", slider.getValue()));
+            // Clear...
+            ganttChart.getChildren().clear();
+            // Setting the Gantt Chart to fit the intervals...
+            ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
+            ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
+            // Visualize...
+            setGrid(ganttChart);
+            for (Visualisable v : visualisables[0]) {
+                map(ganttChart, v);
+            }
+        });
+        value.setOnAction(actionEvent -> {
+            this.hScale = Double.parseDouble(value.getText());
+            slider.setValue(this.hScale);
+            // Clear...
+            ganttChart.getChildren().clear();
+            // Setting the Gantt Chart to fit the intervals...
+            ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
+            ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
+            // Visualize...
+            setGrid(ganttChart);
+            for (Visualisable v : visualisables[0]) {
+                map(ganttChart, v);
+            }
+        });
         // Setting the Logic of the Toggle Buttons...
         processes.setOnAction(actionEvent -> {
             processes.setSelected(true);
