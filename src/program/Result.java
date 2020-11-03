@@ -1,17 +1,18 @@
 package program;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import schedulers.Scheduler;
 import schedulers.components.Quantum;
 import schedulers.components.Record;
@@ -21,7 +22,12 @@ import java.util.ArrayList;
 
 public class Result {
     private Scheduler scheduler;
-    private double totalTime;
+    private double finalTime;
+    private double beginTime;
+    private double vScale = 1.0;
+    private double hScale = 1.0;
+    private double screenHeight = 400.0;
+    private double screenWidth = 900.0;
 
     public Result(Scheduler scheduler) {
         this.scheduler = scheduler;
@@ -35,32 +41,29 @@ public class Result {
         AnchorPane result = new AnchorPane();
         stage.setScene(new Scene(result, 900, 400));
         stage.show();
+        // Averages Panel...
         VBox averages = FXMLLoader.load(getClass().getResource("screens/averages.fxml"));
         AnchorPane.setRightAnchor(averages, 650.0);
         AnchorPane.setLeftAnchor(averages, 0.0);
         AnchorPane.setTopAnchor(averages, 0.0);
         AnchorPane.setBottomAnchor(averages, 0.0);
         result.getChildren().add(averages);
-        Pane axis = FXMLLoader.load(getClass().getResource("screens/axis.fxml"));
-        axis.setStyle("-fx-background-color: yellow;");
-        AnchorPane.setRightAnchor(axis, 550.0);
-        AnchorPane.setLeftAnchor(axis, 250.0);
-        AnchorPane.setTopAnchor(axis, 0.0);
-        AnchorPane.setBottomAnchor(axis, 0.0);
-        result.getChildren().add(axis);
+        // Gantt Chart Panel...
         Pane ganttChart = FXMLLoader.load(getClass().getResource("screens/gantt_chart.fxml"));
-        ganttChart.setStyle("-fx-background-color: blue;");
-        AnchorPane.setRightAnchor(ganttChart, 0.0);
-        AnchorPane.setLeftAnchor(ganttChart, 350.0);
-        AnchorPane.setTopAnchor(ganttChart, 0.0);
-        AnchorPane.setBottomAnchor(ganttChart, 0.0);
-        result.getChildren().add(ganttChart);
-        stage.widthProperty().addListener((observableValue, number, t1) -> {
+        ganttChart.setStyle("-fx-background-color: #FFFFFF;");
+        ScrollPane scrollPane = new ScrollPane(ganttChart);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        AnchorPane.setRightAnchor(scrollPane, 0.0);
+        AnchorPane.setLeftAnchor(scrollPane, 250.0);
+        AnchorPane.setTopAnchor(scrollPane, 0.0);
+        AnchorPane.setBottomAnchor(scrollPane, 0.0);
+        result.getChildren().add(scrollPane);
+        result.widthProperty().addListener((observableValue, number, t1) -> {
             AnchorPane.setRightAnchor(averages, t1.doubleValue() * 650 / 900);
-            AnchorPane.setLeftAnchor(axis, t1.doubleValue() * 250 / 900);
-            AnchorPane.setRightAnchor(axis, t1.doubleValue() * 350 / 900);
-            AnchorPane.setLeftAnchor(ganttChart, t1.doubleValue() * 350 / 900);
+            AnchorPane.setLeftAnchor(scrollPane, t1.doubleValue() * 250 / 900);
         });
+        // Defining the averages...
         double startTime = 0;
         double finishTime = 0;
         double arrivalTime = 0;
@@ -68,6 +71,7 @@ public class Result {
         double turnAround = 0;
         double weightedTurnAround = 0;
         double waitTime = 0;
+        // Toggle Buttons...
         HBox choose = (HBox) Main.getElementById(averages, "choose");
         ToggleButton processes = (ToggleButton) Main.getElementById(choose, "processes");
         processes.setSelected(true);
@@ -76,6 +80,7 @@ public class Result {
         // Waiting for the scheduler to finish scheduling
         while(thread.isAlive());
         // Continue building the UI and filling the results
+        // Calculating the averages...
         for (Record record : scheduler.getProcessesLog()) {
             startTime += record.getStartTime();
             finishTime += record.getFinishTime();
@@ -92,6 +97,7 @@ public class Result {
         turnAround /= scheduler.numOfProcesses;
         weightedTurnAround /= scheduler.numOfProcesses;
         waitTime /= scheduler.numOfProcesses;
+        // Setting the averages...
         GridPane avgs = (GridPane) Main.getElementById(averages, "grid");
         avgs.add(new Text(String.format("%.2f", startTime)), 1, 0);
         avgs.add(new Text(String.format("%.2f", finishTime)), 1, 1);
@@ -100,86 +106,122 @@ public class Result {
         avgs.add(new Text(String.format("%.2f", turnAround)), 1, 4);
         avgs.add(new Text(String.format("%.2f", weightedTurnAround)), 1, 5);
         avgs.add(new Text(String.format("%.2f", waitTime)), 1, 6);
-        this.totalTime = 0;
+        // Calculate time interval...
+        this.finalTime = 0;
+        this.beginTime = Double.MAX_VALUE;
         for (Quantum quantum : scheduler.getCpuLog()) {
-            this.totalTime = Double.max(this.totalTime, quantum.getFinishTime());
+            this.finalTime = Double.max(this.finalTime, quantum.getFinishTime());
+            this.beginTime = Double.min(this.beginTime, quantum.getStartTime());
         }
+        // Define the intervals to be visulaized...
         final ArrayList<Visualisable>[] visualisables = new ArrayList[]{scheduler.getProcessesLogVis()};
-        setAxis(axis, result.getWidth() / 9, result.getHeight());
+        // Setting the Gantt Chart to fit the intervals...
+        ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
+        ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
+        // Visualize...
+        setGrid(ganttChart);
         for (Visualisable v : visualisables[0]) {
-            map(ganttChart, v, result.getWidth() * 550 / 900, result.getHeight());
+            map(ganttChart, v);
         }
+        // Setting the Logic of the Toggle Buttons...
         processes.setOnAction(actionEvent -> {
             processes.setSelected(true);
             cpu.setSelected(false);
             visualisables[0] = scheduler.getProcessesLogVis();
+            ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
+            ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
             ganttChart.getChildren().clear();
+            setGrid(ganttChart);
             for (Visualisable v : visualisables[0]) {
-                map(ganttChart, v, result.getWidth() * 550 / 900, result.getHeight());
+                map(ganttChart, v);
             }
         });
         cpu.setOnAction(actionEvent -> {
             cpu.setSelected(true);
             processes.setSelected(false);
             visualisables[0] = scheduler.getCpuLogVis();
+            ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
+            ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
             ganttChart.getChildren().clear();
+            setGrid(ganttChart);
             for (Visualisable v : visualisables[0]) {
-                map(ganttChart, v, result.getWidth() * 550 / 900, result.getHeight());
+                map(ganttChart, v);
             }
         });
+        // Defining a Dynamic Layout...
         result.widthProperty().addListener((observableValue, number, t1) -> {
-            axis.getChildren().clear();
-            setAxis(axis, t1.doubleValue() / 9, result.getHeight());
+            this.screenWidth = t1.doubleValue();
+            ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
+            ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
             ganttChart.getChildren().clear();
+            setGrid(ganttChart);
             for (Visualisable v : visualisables[0]) {
-                map(ganttChart, v, t1.doubleValue() * 550 / 900, result.getHeight());
+                map(ganttChart, v);
             }
         });
         result.heightProperty().addListener((observableValue, number, t1) -> {
-            axis.getChildren().clear();
-            setAxis(axis, result.getWidth() / 9, t1.doubleValue());
+            this.screenHeight = t1.doubleValue();
+            ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
+            ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
             ganttChart.getChildren().clear();
+            setGrid(ganttChart);
             for (Visualisable v : visualisables[0]) {
-                map(ganttChart, v, result.getWidth() * 550 / 900, t1.doubleValue());
+                map(ganttChart, v);
             }
         });
     }
 
-    private void setAxis(Pane axis, double w, double h){
-        h -= 20;
-        int n = scheduler.numOfProcesses;
-        for (Long i : scheduler.processesTable.keySet()){
-            int y = scheduler.processesTable.get(i);
-            HBox temp = new HBox();
-            temp.setAlignment(Pos.CENTER);
-            temp.setLayoutY(h * y / n + 10);
-            temp.setMinWidth(w);
-            temp.setMinHeight(h / n);
-            Text text = new Text();
-            text.setText(i.toString());
-            text.setFont(Font.font("Eras Demi ITC", 25.0));
-            text.setFill(Color.RED);
-            temp.getChildren().add(text);
-            axis.getChildren().add(temp);
+    private void setGrid(Pane ganttChart){
+        double maxHeight = 0;
+        double l = Math.ceil(this.beginTime);
+        double r = Double.max(Math.floor(this.finalTime), Math.floor((this.screenWidth * 650 / 900 - 10) / (20 * this.hScale)));
+        while (Double.compare(l, r) <= 0) {
+            Line line = new Line(l * 20 * this.hScale + 5, 0, l * 20 * this.hScale + 5, this.screenHeight + 20);
+            line.setStrokeWidth(0.25);
+            ganttChart.getChildren().add(line);
+            l++;
+        }
+        int y = 0;
+        while (Double.compare((this.vScale * 30 + 5) * y + 2.5, this.screenHeight - 10) <= 0) {
+            Line line = new Line(0, (this.vScale * 30 + 5) * y + 2.5, r * 20 * this.hScale + 20, (this.vScale * 30 + 5) * y + 2.5);
+            line.setStrokeWidth(0.1);
+            ganttChart.getChildren().add(line);
+            y++;
         }
     }
 
-    private void map(Pane ganttChart, Visualisable v, double w, double h){
-        w -= 20;
-        h -= 20;
+    private void map(Pane ganttChart, Visualisable v){
+        // Define the Colors...
+        String[] colors = {"#FFAEBC", "#A0E7E5", "#B4F8C8", "#FBE7C6", "#EFF1DB", "#FFD4DB", "#BBE7FE", "#D3B5E5"};
+        // Define the interval boundaries...
         double l = v.getStartTime();
         double r = v.getFinishTime();
-        int y = scheduler.processesTable.get(v.getProcessID());
-        double t = this.totalTime;
-        int n = scheduler.numOfProcesses;
+        // The Y coordinates of the process...
+        int y = scheduler.getIndexOfProcess(v.getProcessID());
+        // Drawing the rectangle which will represent the interval...
         Rectangle rectangle = new Rectangle();
-        rectangle.setHeight(h / n);
-        rectangle.setWidth((r - l) * w / t);
-        rectangle.setLayoutX(l * w / t + 10);
-        rectangle.setLayoutY(h * y / n + 10);
+        rectangle.setHeight(this.vScale * 30);
+        rectangle.setWidth((r - l) * this.hScale * 20);
+        rectangle.setLayoutX(l * this.hScale * 20 + 5);
+        rectangle.setLayoutY((this.vScale * 30 + 5) * y + 5);
         rectangle.setArcHeight(15);
         rectangle.setArcWidth(15);
-        rectangle.setFill(Color.RED);
+        rectangle.setFill(Color.web(colors[(int) ((v.getProcessID() + colors.length) % colors.length)]));
+        // Adding some dropshadow...
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setHeight(1.5);
+        dropShadow.setWidth(1.5);
+        dropShadow.setRadius(5);
+        rectangle.setEffect(dropShadow);
+        // Adding a tooltip contains the information of the interval...
+        Tooltip tooltip = new Tooltip("PID: " + v.getProcessID() + "\nStarting Time: " + v.getStartTime() + "\nFinish Time: " + v.getFinishTime());
+        tooltip.setShowDelay(Duration.millis(30.0));
+        rectangle.setOnMouseMoved(mouseEvent -> {
+            tooltip.setX(mouseEvent.getScreenX());
+            tooltip.setY(mouseEvent.getScreenY());
+        });
+        Tooltip.install(rectangle, tooltip);
+        // Adding all to the Gantt Chart...
         ganttChart.getChildren().add(rectangle);
     }
 }
