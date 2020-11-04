@@ -119,7 +119,7 @@ public class Main extends Application {
                         try {
                             readFile(file[0]);
                             primaryStage.setScene(
-                                    new Scene(mainScreen, 600, 400)
+                                    new Scene(mainScreen, 782, 715)
                             );
                             handelMainScreenActions(mainScreen);
                         } catch (Exception e) {
