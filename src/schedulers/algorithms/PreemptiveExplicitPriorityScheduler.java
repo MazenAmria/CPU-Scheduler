@@ -60,7 +60,7 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
                 this.readyQueue.get(0).setRemainingTime(this.readyQueue.get(0).getRemainingTime() - 1);
                 Record record = findRecordByPID(this.processesLog, this.readyQueue.get(0).getProcessID());
                 record.setStartTime(Double.min(currentTime, record.getStartTime()));
-                record.setFinishTime(Double.max(currentTime, record.getFinishTime()));
+                record.setFinishTime(Double.max(currentTime + 1, record.getFinishTime()));
                 // Schedulers.Components.Record the CPU progress
                 if (this.cpuLog.isEmpty() || this.cpuLog.get(this.cpuLog.size() - 1).getProcessID() != this.readyQueue.get(0).getProcessID()) {
                     this.cpuLog.add(new Quantum(

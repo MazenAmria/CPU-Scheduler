@@ -28,6 +28,10 @@ public class MainScreenHandeler {
         CheckBox autoTimeQuantum = (CheckBox) getElementById(mainScreen,"auto_time_quantum");
         CheckBox autoAgeFactor = (CheckBox) getElementById(mainScreen,"auto_age_factor") ;
         MenuButton IO = (MenuButton) getElementById(mainScreen,"io_percentage");
+        Button exit = (Button) getElementById(mainScreen, "exit");
+        exit.setOnAction(actionEvent -> {
+            System.exit(0);
+        });
 
         timeQuantum.setDisable(true);
         autoTimeQuantum.setDisable(true);

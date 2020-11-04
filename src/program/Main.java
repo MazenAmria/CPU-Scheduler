@@ -2,6 +2,7 @@ package program;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -48,11 +49,15 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Pane fileLoadingScreen = FXMLLoader.load(getClass().getResource("screens/file_loading_screen.fxml"));
         Pane mainScreen = FXMLLoader.load(getClass().getResource("screens/main_screen.fxml"));
-        //primaryStage.initStyle(StageStyle.UNDECORATED);
-        //primaryStage.setResizable(true);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setResizable(true);
         Button loadFile = (Button) getElementById(fileLoadingScreen, "load_file");
         Button browse = (Button) getElementById(fileLoadingScreen, "browse");
         TextField fileName = (TextField) getElementById(fileLoadingScreen, "file_name");
+        Button exit = (Button) getElementById(fileLoadingScreen, "exit");
+        exit.setOnAction(actionEvent -> {
+            System.exit(0);
+        });
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("./"));
@@ -88,24 +93,29 @@ public class Main extends Application {
                     if (file[0] == null) {
                         try {
                             file[0] = new File(fileName.getText());
-                            if (fileName.getText() == "") throw new Exception("InValid File Name");
+                            if (fileName.getText() == "") throw new Exception("Invalid File Name");
                         } catch (Exception e) {
                             // Stop the Operation until a file is entered
-                            AlertWindow alert = new AlertWindow();
-                            alert.displayAlertWindow("File Not Found Error" , "You have to include a file to continue");
+                            /*AlertWindow alert = new AlertWindow();
+                            alert.displayAlertWindow("File Not Found Error" , "You have to include a file to continue");*/
+                            (new Alert(Alert.AlertType.ERROR, "You have to include a file to continue")).show();
                         }
                     }
                     else{
                         try {
                             readFile(file[0]);
+                            /*primaryStage.widthProperty().removeListener(widthListener);
+                            primaryStage.heightProperty().removeListener(heightListener);
+                            primaryStage.setWidth(782);
+                            primaryStage.setHeight(715);*/
                             primaryStage.setScene(
-                                    new Scene(mainScreen, 782, 715)
+                                new Scene(mainScreen, 600, 400)
                             );
-
                             handelMainScreenActions(mainScreen);
                         } catch (FileNotFoundException e){
-                            AlertWindow alert = new AlertWindow();
-                            alert.displayAlertWindow("File Not Found Error" , "You have to include a file to continue");
+                            /*AlertWindow alert = new AlertWindow();
+                            alert.displayAlertWindow("File Not Found Error" , "You have to include a file to continue");*/
+                            (new Alert(Alert.AlertType.ERROR, "You have to include a file to continue")).show();
                         } catch (Exception e) {
                             System.out.print(e.getMessage());
                         }
@@ -113,13 +123,12 @@ public class Main extends Application {
                 }
         );
         primaryStage.setScene(new Scene(fileLoadingScreen,600 ,400));
-      //  primaryStage.widthProperty().addListener(widthListener);
-      //  primaryStage.heightProperty().addListener(heightListener);
+        primaryStage.widthProperty().addListener(widthListener);
+        primaryStage.heightProperty().addListener(heightListener);
         primaryStage.show();
     }
 
     private void readFile(File file) throws FileNotFoundException {
-        System.out.println(file.getAbsolutePath());
         Scanner sc = new Scanner(file);
         while(sc.hasNext()) {
             String line = sc.nextLine();
@@ -132,7 +141,7 @@ public class Main extends Application {
     }
 
     public static double findTimeQuantum(ArrayList<Process> processes) {
-        double timeQuantum = 0;
+        double timeQuantum;
         processes = new ArrayList<>(processes);
         // Sort processes based on the task duration parameter
         Collections.sort(processes, Comparator.comparingDouble(Process::getTaskDuration));
@@ -143,12 +152,12 @@ public class Main extends Application {
     }
 
     public static long findAgeFactor(ArrayList<Process> processes) {
-        long MaxPID = Long.MAX_VALUE , MinPID = 0 ;
-        for(int i=0;i<processes.size();i++){
-            MaxPID = Math.max(MaxPID , processes.get(i).getProcessID()) ;
-            MinPID = Math.min(MinPID , processes.get(i).getProcessID()) ;
+        long MaxPID = Long.MIN_VALUE, MinPID = Long.MAX_VALUE;
+        for (Process process: processes) {
+            MaxPID = Long.max(MaxPID, process.getProcessID());
+            MinPID = Long.min(MinPID, process.getProcessID());
         }
-        return (MaxPID-MinPID)/processes.size() ;
+        return (MaxPID - MinPID) / processes.size();
     }
 
 

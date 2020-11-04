@@ -44,13 +44,6 @@ public class NonPreemptiveExplicitPriorityScheduler extends Scheduler {
             while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
                 // Insert
                 this.readyQueue.add(this.processes.get(cursor));
-                this.processesLog.add(new Record(
-                        this.processes.get(cursor).getProcessID(),
-                        Long.MAX_VALUE,
-                        Long.MIN_VALUE,
-                        this.processes.get(cursor).getTaskDuration(),
-                        this.processes.get(cursor).getArrivalTime()
-                ));
                 cursor++;
             }
             // Sort

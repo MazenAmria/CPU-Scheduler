@@ -10,6 +10,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import schedulers.Scheduler;
 import schedulers.components.Quantum;
@@ -36,6 +37,8 @@ public class Result {
         thread.start();
         // Building and showing the basic UI
         Stage stage = new Stage();
+        String[] schedulerName = this.scheduler.getClass().getName().split("\\.");
+        stage.setTitle(schedulerName[schedulerName.length - 1]);
         AnchorPane result = new AnchorPane();
         stage.setScene(new Scene(result, 900, 400));
         stage.show();
