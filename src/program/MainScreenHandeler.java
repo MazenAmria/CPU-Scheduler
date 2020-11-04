@@ -11,8 +11,6 @@ import static program.Main.*;
 
 public class MainScreenHandeler {
 
-    private static boolean isPreemptive;
-
     public static void handelMainScreenActions(Pane mainScreen) {
 
         Button firstComeFirstServed = (Button) getElementById(mainScreen, "first_come_first_served");
@@ -22,8 +20,7 @@ public class MainScreenHandeler {
         Button explicitPriorityWithoutPreemption = (Button) getElementById(mainScreen, "explicit_priority_without_preemption");
         Button roundRobin = (Button) getElementById(mainScreen, "round_robin");
         Button multiprogrammingWithUniformIoPercentage = (Button) getElementById(mainScreen, "multiprogramming_with_uniform_io_percentage");
-        HBox hbox1 = (HBox) getElementById(mainScreen, "hbox1");
-        TextField timeQuantum = (TextField) getElementById(hbox1, "time_quantum");
+        TextField timeQuantum = (TextField) getElementById(mainScreen, "time_quantum");
         TextField ageFactor = (TextField) getElementById(mainScreen, "age_factor");
         CheckBox autoTimeQuantum = (CheckBox) getElementById(mainScreen, "auto_time_quantum");
         CheckBox autoAgeFactor = (CheckBox) getElementById(mainScreen, "auto_age_factor");
@@ -74,14 +71,12 @@ public class MainScreenHandeler {
         );
         explicitPriorityWithPreemption.setOnAction(
                 event -> {
-                    MainScreenHandeler.isPreemptive = true;
-                    setAutoOrUserEntryForPriorityScheduler(autoAgeFactor, ageFactor);
+                    setAutoOrUserEntryForPriorityScheduler(autoAgeFactor, ageFactor, true);
                 }
         );
         explicitPriorityWithoutPreemption.setOnAction(
                 event -> {
-                    MainScreenHandeler.isPreemptive = false;
-                    setAutoOrUserEntryForPriorityScheduler(autoAgeFactor, ageFactor);
+                    setAutoOrUserEntryForPriorityScheduler(autoAgeFactor, ageFactor, false);
                 }
         );
         roundRobin.setOnAction(
@@ -154,14 +149,14 @@ public class MainScreenHandeler {
         );
     }
 
-    public static void setAutoOrUserEntryForPriorityScheduler(CheckBox auto, TextField userEnrty) {
+    public static void setAutoOrUserEntryForPriorityScheduler(CheckBox auto, TextField userEnrty, boolean flag) { // flag = true ==> with preemption , else without
         auto.setDisable(false);
         userEnrty.setDisable(false);
         auto.setOnAction(
                 event1 -> {
                     userEnrty.setDisable(true);
                     Scheduler scheduler;
-                    if (MainScreenHandeler.isPreemptive)
+                    if (flag)
                         scheduler = new PreemptiveExplicitPriorityScheduler(processes, findAgeFactor(processes));
                     else
                         scheduler = new NonPreemptiveExplicitPriorityScheduler(processes, findAgeFactor(processes));
@@ -181,7 +176,7 @@ public class MainScreenHandeler {
                 event2 -> {
                     auto.setDisable(true);
                     Scheduler scheduler;
-                    if (MainScreenHandeler.isPreemptive)
+                    if (flag)
                         scheduler = new PreemptiveExplicitPriorityScheduler(processes, Long.parseLong(userEnrty.getText()));
                     else
                         scheduler = new NonPreemptiveExplicitPriorityScheduler(processes, Long.parseLong(userEnrty.getText()));
