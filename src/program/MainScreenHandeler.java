@@ -44,7 +44,7 @@ public class MainScreenHandeler {
                     try {
                         result.show();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
                     }
                 }
         );
@@ -55,7 +55,7 @@ public class MainScreenHandeler {
                     try {
                         result.show();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
                     }
                 }
         );
@@ -66,7 +66,7 @@ public class MainScreenHandeler {
                     try {
                         result.show();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
                     }
                 }
         );
@@ -104,7 +104,7 @@ public class MainScreenHandeler {
                                 try {
                                     result.show();
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+                                    (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
                                 }
                             }
                     );
@@ -119,20 +119,16 @@ public class MainScreenHandeler {
         userEnrty.setDisable(false);
         auto.setOnAction(
                 event1 -> {
-                    if (auto.isSelected()) {
-                        userEnrty.setDisable(true);
-                        // just for now
-                        Scheduler roundRobinScheduler = new RoundRobinScheduler(processes, findTimeQuantum(processes));
-                        Result result = new Result(roundRobinScheduler);
-                        try {
-                            result.show();
-                            auto.setSelected(false);
-                            auto.setDisable(true);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else { // no need
-                        userEnrty.setDisable(false);
+                    userEnrty.setDisable(true);
+                    Scheduler roundRobinScheduler = new RoundRobinScheduler(processes, findTimeQuantum(processes));
+                    Result result = new Result(roundRobinScheduler);
+                    try {
+                        result.show();
+                    } catch (Exception e) {
+                        (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
+                    } finally {
+                        auto.setSelected(false);
+                        auto.setDisable(true);
                     }
                 }
         );
@@ -144,11 +140,11 @@ public class MainScreenHandeler {
                     Result result = new Result(roundRobinScheduler);
                     try {
                         result.show();
-                        // timeQuantum.setText("");
+                    } catch (Exception e) {
+                        (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
+                    } finally {
                         userEnrty.clear();
                         userEnrty.setDisable(true);
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
         );
@@ -159,24 +155,20 @@ public class MainScreenHandeler {
         userEnrty.setDisable(false);
         auto.setOnAction(
                 event1 -> {
-                    if (auto.isSelected()) {
-                        userEnrty.setDisable(true);
-                        // just for now
-                        Scheduler scheduler;
-                        if (flag)
-                            scheduler = new PreemptiveExplicitPriorityScheduler(processes, findAgeFactor(processes));
-                        else
-                            scheduler = new NonPreemptiveExplicitPriorityScheduler(processes, findAgeFactor(processes));
-                        Result result = new Result(scheduler);
-                        try {
-                            result.show();
-                            auto.setSelected(false);
-                            auto.setDisable(true);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else { // no need
-                        userEnrty.setDisable(false);
+                    userEnrty.setDisable(true);
+                    Scheduler scheduler;
+                    if (flag)
+                        scheduler = new PreemptiveExplicitPriorityScheduler(processes, findAgeFactor(processes));
+                    else
+                        scheduler = new NonPreemptiveExplicitPriorityScheduler(processes, findAgeFactor(processes));
+                    Result result = new Result(scheduler);
+                    try {
+                        result.show();
+                    } catch (Exception e) {
+                        (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
+                    } finally {
+                        auto.setSelected(false);
+                        auto.setDisable(true);
                     }
                 }
         );
@@ -192,10 +184,11 @@ public class MainScreenHandeler {
                     Result result = new Result(scheduler);
                     try {
                         result.show();
+                    } catch (Exception e) {
+                        (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
+                    } finally {
                         userEnrty.clear();
                         userEnrty.setDisable(true);
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
         );

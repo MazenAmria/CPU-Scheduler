@@ -75,10 +75,14 @@ public class Result {
         // Toggle Buttons...
         VBox lower = (VBox) Main.getElementById(container, "lower");
         HBox choose = (HBox) Main.getElementById(lower, "choose");
+        String selectedStyle = "-fx-border-color: #F93F40; -fx-border-width: 2px; -fx-border-radius: 3px; -fx-background-color: #7b6d8d;";
+        String notSelectedStyle = "-fx-border-width: 0px; -fx-background-color: #7b6d8d;";
         ToggleButton processes = (ToggleButton) Main.getElementById(choose, "processes");
         processes.setSelected(true);
+        processes.setStyle(selectedStyle);
         ToggleButton cpu = (ToggleButton) Main.getElementById(choose, "cpu");
         cpu.setSelected(false);
+        cpu.setStyle(notSelectedStyle);
         HBox scale = (HBox) Main.getElementById(lower, "scale");
         Slider slider = (Slider) Main.getElementById(scale, "slider");
         slider.setMax(4.00);
@@ -178,7 +182,9 @@ public class Result {
         // Setting the Logic of the Toggle Buttons...
         processes.setOnAction(actionEvent -> {
             processes.setSelected(true);
+            processes.setStyle(selectedStyle);
             cpu.setSelected(false);
+            cpu.setStyle(notSelectedStyle);
             visualisables[0] = scheduler.getProcessesLogVis();
             ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
             ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
@@ -190,7 +196,9 @@ public class Result {
         });
         cpu.setOnAction(actionEvent -> {
             cpu.setSelected(true);
+            cpu.setStyle(selectedStyle);
             processes.setSelected(false);
+            processes.setStyle(notSelectedStyle);
             visualisables[0] = scheduler.getCpuLogVis();
             ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
             ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
