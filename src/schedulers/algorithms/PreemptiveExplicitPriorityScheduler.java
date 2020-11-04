@@ -1,6 +1,6 @@
 package schedulers.algorithms;
 
-import schedulers.*;
+import schedulers.Scheduler;
 import schedulers.components.Process;
 import schedulers.components.ProcessContainer;
 import schedulers.components.Quantum;
@@ -18,9 +18,9 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
         this.ageFactor = ageFactor;
     }
 
-    Record findRecordByPID(ArrayList<Record> records, long PID){
-        for(Record record : records){
-            if(record.getProcessID() == PID) return record;
+    Record findRecordByPID(ArrayList<Record> records, long PID) {
+        for (Record record : records) {
+            if (record.getProcessID() == PID) return record;
         }
         return null;
     }
@@ -34,14 +34,14 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
         // Number of finished processes
         int finished = 0;
         // Clearing the Ages and Remaining Times for All Procesess
-        for(ProcessContainer process : this.processes){
+        for (ProcessContainer process : this.processes) {
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
         }
         // While there are processes to execute
-        while(finished < this.processes.size()){
+        while (finished < this.processes.size()) {
             // Add new arrival processes to ready queue (depending on their burst)
-            while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
+            while (this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime) {
                 // Insert
                 this.readyQueue.add(this.processes.get(cursor));
                 this.processesLog.add(new Record(
@@ -55,7 +55,7 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
             }
             // Sort
             Collections.sort(this.readyQueue, Comparator.comparingLong(ProcessContainer::getPriority));
-            if(!readyQueue.isEmpty()) {
+            if (!readyQueue.isEmpty()) {
                 // Making progress in the process
                 this.readyQueue.get(0).setRemainingTime(this.readyQueue.get(0).getRemainingTime() - 1);
                 Record record = findRecordByPID(this.processesLog, this.readyQueue.get(0).getProcessID());

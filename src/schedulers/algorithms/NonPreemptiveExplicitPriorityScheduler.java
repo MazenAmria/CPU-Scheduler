@@ -1,6 +1,6 @@
 package schedulers.algorithms;
 
-import schedulers.*;
+import schedulers.Scheduler;
 import schedulers.components.Process;
 import schedulers.components.ProcessContainer;
 import schedulers.components.Quantum;
@@ -18,9 +18,9 @@ public class NonPreemptiveExplicitPriorityScheduler extends Scheduler {
         this.ageFactor = ageFactor;
     }
 
-    Record findRecordByPID(ArrayList<Record> records, long PID){
-        for(Record record : records){
-            if(record.getProcessID() == PID) return record;
+    Record findRecordByPID(ArrayList<Record> records, long PID) {
+        for (Record record : records) {
+            if (record.getProcessID() == PID) return record;
         }
         return null;
     }
@@ -34,21 +34,21 @@ public class NonPreemptiveExplicitPriorityScheduler extends Scheduler {
         // Number of finished processes
         int finished = 0;
         // Clearing the Ages and Remaining Times for All Processes
-        for(ProcessContainer process : this.processes){
+        for (ProcessContainer process : this.processes) {
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
         }
         // While there are processes to execute
-        while(finished < this.processes.size()){
+        while (finished < this.processes.size()) {
             // Add new arrival processes to ready queue (depending on their burst)
-            while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
+            while (this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime) {
                 // Insert
                 this.readyQueue.add(this.processes.get(cursor));
                 cursor++;
             }
             // Sort
             Collections.sort(this.readyQueue, Comparator.comparingLong(ProcessContainer::getPriority));
-            if(!readyQueue.isEmpty()) {
+            if (!readyQueue.isEmpty()) {
                 // Finish the process
                 this.readyQueue.get(0).setRemainingTime(0);
                 // Save process execution in the log
@@ -73,7 +73,7 @@ public class NonPreemptiveExplicitPriorityScheduler extends Scheduler {
                 // Terminate the process
                 this.readyQueue.remove(0);
                 finished++;
-            }else{
+            } else {
                 this.currentTime = Math.floor(this.currentTime + 1);
             }
         }

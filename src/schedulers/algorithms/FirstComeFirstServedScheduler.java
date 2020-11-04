@@ -11,33 +11,33 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class FirstComeFirstServedScheduler extends Scheduler {
-	
-	public FirstComeFirstServedScheduler(ArrayList<Process> processes) {
+
+    public FirstComeFirstServedScheduler(ArrayList<Process> processes) {
         super(processes);
     }
-	
-	@Override
-	public void run() {
-		// Sort The processes by arrival time
+
+    @Override
+    public void run() {
+        // Sort The processes by arrival time
         Collections.sort(this.processes, Comparator.comparing(ProcessContainer::getProcess));
         // Set a cursor to traverse the processes
         int cursor = 0;
         // Number of finished processes
         int finished = 0;
         // Clearing the Ages and Remaining Times for All Processes
-        for(ProcessContainer process : this.processes){
+        for (ProcessContainer process : this.processes) {
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
         }
         // While there are processes to execute
-        while(finished < this.processes.size()){
+        while (finished < this.processes.size()) {
             // Add new arrival processes to ready queue
-            while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
+            while (this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime) {
                 // Insert
                 this.readyQueue.add(this.processes.get(cursor));
                 cursor++;
             }
-            if(!this.readyQueue.isEmpty()) {
+            if (!this.readyQueue.isEmpty()) {
                 // Finish the process
                 this.readyQueue.get(0).setRemainingTime(0);
                 // Save process execution in the log
@@ -58,11 +58,11 @@ public class FirstComeFirstServedScheduler extends Scheduler {
                 // Terminate the process
                 this.readyQueue.remove(0);
                 finished++;
-            }else{
+            } else {
                 // If no processes in the queue, skip to the next quantum
                 this.currentTime = Math.floor(this.currentTime + 1);
             }
         }
-	}
-	
+    }
+
 }

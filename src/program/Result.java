@@ -10,7 +10,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import schedulers.Scheduler;
 import schedulers.components.Quantum;
@@ -20,10 +19,10 @@ import schedulers.components.Visualisable;
 import java.util.ArrayList;
 
 public class Result {
-    private Scheduler scheduler;
+    private final Scheduler scheduler;
     private double finalTime;
     private double beginTime;
-    private double vScale = 1.0;
+    private final double vScale = 1.0;
     private double hScale = 1.0;
     private double screenHeight = 400.0;
     private double screenWidth = 900.0;
@@ -88,7 +87,7 @@ public class Result {
         TextField value = (TextField) Main.getElementById(scale, "value");
         value.setText("1.00");
         // Waiting for the scheduler to finish scheduling
-        while(thread.isAlive());
+        while (thread.isAlive()) ;
         // Continue building the UI and filling the results
         // Calculating the averages...
         for (Record record : scheduler.getProcessesLog()) {
@@ -224,7 +223,7 @@ public class Result {
         });
     }
 
-    private void setGrid(Pane ganttChart){
+    private void setGrid(Pane ganttChart) {
         double maxHeight = 0;
         double l = Math.ceil(this.beginTime);
         double r = Double.max(Math.floor(this.finalTime), Math.floor((this.screenWidth * 650 / 900 - 10) / (20 * this.hScale)));
@@ -243,7 +242,7 @@ public class Result {
         }
     }
 
-    private void map(Pane ganttChart, Visualisable v){
+    private void map(Pane ganttChart, Visualisable v) {
         // Define the Colors...
         String[] colors = {"#FFAEBC", "#A0E7E5", "#B4F8C8", "#FBE7C6", "#EFF1DB", "#FFD4DB", "#BBE7FE", "#D3B5E5"};
         // Define the interval boundaries...

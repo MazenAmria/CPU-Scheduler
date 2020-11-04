@@ -1,7 +1,7 @@
 package schedulers.components;
 
 public class ProcessContainer {
-    private Process process;
+    private final Process process;
     private double remainingTime;
     private long age;
 

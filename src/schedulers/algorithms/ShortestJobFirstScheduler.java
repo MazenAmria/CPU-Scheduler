@@ -1,6 +1,6 @@
 package schedulers.algorithms;
 
-import schedulers.*;
+import schedulers.Scheduler;
 import schedulers.components.Process;
 import schedulers.components.ProcessContainer;
 import schedulers.components.Quantum;
@@ -24,21 +24,21 @@ public class ShortestJobFirstScheduler extends Scheduler {
         // Number of finished processes
         int finished = 0;
         // Clearing the Ages and Remaining Times for All Processes
-        for(ProcessContainer process : this.processes){
+        for (ProcessContainer process : this.processes) {
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
         }
         // While there are processes to execute
-        while(finished < this.processes.size()){
+        while (finished < this.processes.size()) {
             // Add new arrival processes to ready queue (depending on their burst)
-            while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
+            while (this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime) {
                 // Find The position
                 int index = Collections.binarySearch(
                         this.readyQueue,
                         this.processes.get(cursor),
                         Comparator.comparing(ProcessContainer::getTaskDuration)
                 );
-                if(index < 0) index = -1 - index;
+                if (index < 0) index = -1 - index;
                 // Insert
                 this.readyQueue.add(
                         index,
@@ -46,7 +46,7 @@ public class ShortestJobFirstScheduler extends Scheduler {
                 );
                 cursor++;
             }
-            if(!this.readyQueue.isEmpty()) {
+            if (!this.readyQueue.isEmpty()) {
                 // Finish the process
                 this.readyQueue.get(0).setRemainingTime(0);
                 // Save process execution in the log
@@ -67,7 +67,7 @@ public class ShortestJobFirstScheduler extends Scheduler {
                 // Terminate the process
                 this.readyQueue.remove(0);
                 finished++;
-            }else{
+            } else {
                 // If no processes in the queue, skip to the next quantum
                 this.currentTime = Math.floor(this.currentTime + 1);
             }

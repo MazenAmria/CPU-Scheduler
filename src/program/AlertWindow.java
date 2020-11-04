@@ -1,6 +1,5 @@
 package program;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,7 +10,7 @@ import javafx.stage.Stage;
 
 public class AlertWindow {
 
-    public void displayAlertWindow(String title , String message){
+    public void displayAlertWindow(String title, String message) {
         Stage alertWindow = new Stage();
         alertWindow.initModality(Modality.APPLICATION_MODAL);
         alertWindow.setTitle(title);

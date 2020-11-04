@@ -16,13 +16,13 @@ abstract public class Scheduler implements Runnable {
     protected ArrayList<Quantum> cpuLog;
     protected double currentTime;
     public int numOfProcesses;
-    private ArrayList<Pair<Long, Double>> processesTable;
+    private final ArrayList<Pair<Long, Double>> processesTable;
 
     public Scheduler(ArrayList<Process> processes) {
         this.processes = new ArrayList<>();
         this.numOfProcesses = processes.size();
         this.processesTable = new ArrayList<>();
-        for (Process process : processes){
+        for (Process process : processes) {
             this.processes.add(new ProcessContainer(
                     process,
                     process.getTaskDuration(),
@@ -41,7 +41,7 @@ abstract public class Scheduler implements Runnable {
 
     public int getIndexOfProcess(long processID) {
         for (int i = 0; i < this.processesTable.size(); i++) {
-            if (((Long) this.processesTable.get(i).getKey()).compareTo(processID) == 0) return i;
+            if (this.processesTable.get(i).getKey().compareTo(processID) == 0) return i;
         }
         return -1;
     }

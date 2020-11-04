@@ -12,18 +12,18 @@ import java.util.Comparator;
 
 public class ShortestRemainingTimeFirstScheduler extends Scheduler {
 
-	public ShortestRemainingTimeFirstScheduler(ArrayList<Process> processes) {
+    public ShortestRemainingTimeFirstScheduler(ArrayList<Process> processes) {
         super(processes);
     }
-	
-	Record findRecordByPID(ArrayList<Record> records, long PID){
-        for(Record record : records){
-            if(record.getProcessID() == PID) return record;
+
+    Record findRecordByPID(ArrayList<Record> records, long PID) {
+        for (Record record : records) {
+            if (record.getProcessID() == PID) return record;
         }
         return null;
     }
-	
-	@Override
+
+    @Override
     public void run() {
         // Sort The processes by arrival time
         Collections.sort(this.processes, Comparator.comparing(ProcessContainer::getProcess));
@@ -32,14 +32,14 @@ public class ShortestRemainingTimeFirstScheduler extends Scheduler {
         // Number of finished processes
         int finished = 0;
         // Clearing the Ages and Remaining Times for All Processes
-        for(ProcessContainer process : this.processes){
+        for (ProcessContainer process : this.processes) {
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
         }
         // While there are processes to execute
-        while(finished < this.processes.size()){
+        while (finished < this.processes.size()) {
             // Add new arrival processes to ready queue
-            while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
+            while (this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime) {
                 // Insert
                 this.readyQueue.add(this.processes.get(cursor));
                 this.processesLog.add(new Record(
@@ -52,8 +52,8 @@ public class ShortestRemainingTimeFirstScheduler extends Scheduler {
                 cursor++;
             }
             Collections.sort(this.readyQueue, Comparator.comparingDouble(ProcessContainer::getRemainingTime));
-            if(!this.readyQueue.isEmpty()) {
-            	this.readyQueue.get(0).setRemainingTime(this.readyQueue.get(0).getRemainingTime() - 1);
+            if (!this.readyQueue.isEmpty()) {
+                this.readyQueue.get(0).setRemainingTime(this.readyQueue.get(0).getRemainingTime() - 1);
                 Record record = findRecordByPID(this.processesLog, this.readyQueue.get(0).getProcessID());
                 record.setStartTime(Double.min(currentTime, record.getStartTime()));
                 record.setFinishTime(Double.max(currentTime + 1, record.getFinishTime()));
@@ -76,5 +76,5 @@ public class ShortestRemainingTimeFirstScheduler extends Scheduler {
             this.currentTime = Math.floor(this.currentTime + 1);
         }
     }
-	
+
 }

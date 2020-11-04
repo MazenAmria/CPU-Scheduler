@@ -53,7 +53,7 @@ public class Record implements Visualisable {
     public void setFinishTime(double finishTime) {
         this.finishTime = finishTime;
         this.turnAround = finishTime - this.arrivalTime;
-        this.weightedTurnAround = this.turnAround / (double) this.taskDuration;
+        this.weightedTurnAround = this.turnAround / this.taskDuration;
         this.waitTime = this.turnAround - this.taskDuration;
     }
 

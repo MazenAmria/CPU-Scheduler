@@ -2,29 +2,22 @@ package program;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import schedulers.Scheduler;
-import schedulers.algorithms.*;
 import schedulers.components.Process;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,7 +35,7 @@ public class Main extends Application {
                 return node;
         }
 
-        return null ;
+        return null;
     }
 
     @Override
@@ -85,23 +78,48 @@ public class Main extends Application {
         browse.setOnAction(
                 event -> {
                     file[0] = fileChooser.showOpenDialog(primaryStage);
-                    fileName.setText(file[0].getAbsolutePath());
+                    if (file[0] != null)
+                        fileName.setText(file[0].getAbsolutePath());
+                }
+        );
+        fileName.setOnAction(
+                event -> {
+                    try {
+                        if (fileName.getText() == "") throw new Exception("Invalid File Name");
+                        file[0] = new File(fileName.getText());
+                        readFile(file[0]);
+                        primaryStage.setScene(
+                                new Scene(mainScreen, 600, 400)
+                        );
+                        handelMainScreenActions(mainScreen);
+                    } catch (Exception e) {
+                        processes.clear();
+                        // Stop the Operation until a file is entered
+                        /*AlertWindow alert = new AlertWindow();
+                        alert.displayAlertWindow("File Not Found Error" , "You have to include a file to continue");*/
+                        (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
+                    }
                 }
         );
         loadFile.setOnAction(
                 event -> {
                     if (file[0] == null) {
                         try {
-                            file[0] = new File(fileName.getText());
                             if (fileName.getText() == "") throw new Exception("Invalid File Name");
+                            file[0] = new File(fileName.getText());
+                            readFile(file[0]);
+                            primaryStage.setScene(
+                                    new Scene(mainScreen, 600, 400)
+                            );
+                            handelMainScreenActions(mainScreen);
                         } catch (Exception e) {
+                            processes.clear();
                             // Stop the Operation until a file is entered
                             /*AlertWindow alert = new AlertWindow();
                             alert.displayAlertWindow("File Not Found Error" , "You have to include a file to continue");*/
-                            (new Alert(Alert.AlertType.ERROR, "You have to include a file to continue")).show();
+                            (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
                         }
-                    }
-                    else{
+                    } else {
                         try {
                             readFile(file[0]);
                             /*primaryStage.widthProperty().removeListener(widthListener);
@@ -109,20 +127,19 @@ public class Main extends Application {
                             primaryStage.setWidth(782);
                             primaryStage.setHeight(715);*/
                             primaryStage.setScene(
-                                new Scene(mainScreen, 600, 400)
+                                    new Scene(mainScreen, 600, 400)
                             );
                             handelMainScreenActions(mainScreen);
-                        } catch (FileNotFoundException e){
+                        } catch (Exception e) {
+                            processes.clear();
                             /*AlertWindow alert = new AlertWindow();
                             alert.displayAlertWindow("File Not Found Error" , "You have to include a file to continue");*/
-                            (new Alert(Alert.AlertType.ERROR, "You have to include a file to continue")).show();
-                        } catch (Exception e) {
-                            System.out.print(e.getMessage());
+                            (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
                         }
                     }
                 }
         );
-        primaryStage.setScene(new Scene(fileLoadingScreen,600 ,400));
+        primaryStage.setScene(new Scene(fileLoadingScreen, 600, 400));
         primaryStage.widthProperty().addListener(widthListener);
         primaryStage.heightProperty().addListener(heightListener);
         primaryStage.show();
@@ -130,7 +147,7 @@ public class Main extends Application {
 
     private void readFile(File file) throws FileNotFoundException {
         Scanner sc = new Scanner(file);
-        while(sc.hasNext()) {
+        while (sc.hasNext()) {
             String line = sc.nextLine();
             String[] fields = line.split(",");
             Process process = new Process(Long.parseLong(fields[0]), Double.parseDouble(fields[1]),
@@ -153,13 +170,12 @@ public class Main extends Application {
 
     public static long findAgeFactor(ArrayList<Process> processes) {
         long MaxPID = Long.MIN_VALUE, MinPID = Long.MAX_VALUE;
-        for (Process process: processes) {
+        for (Process process : processes) {
             MaxPID = Long.max(MaxPID, process.getProcessID());
             MinPID = Long.min(MinPID, process.getProcessID());
         }
         return (MaxPID - MinPID) / processes.size();
     }
-
 
 
     public static void main(String[] args) {

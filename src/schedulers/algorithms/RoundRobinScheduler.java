@@ -1,6 +1,6 @@
 package schedulers.algorithms;
 
-import schedulers.*;
+import schedulers.Scheduler;
 import schedulers.components.Process;
 import schedulers.components.ProcessContainer;
 import schedulers.components.Quantum;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class RoundRobinScheduler extends Scheduler {
-    private double timeQuantum;
+    private final double timeQuantum;
     private ProcessContainer runningProcess;
 
     public RoundRobinScheduler(ArrayList<Process> processes, double timeQuantum) {
@@ -19,9 +19,9 @@ public class RoundRobinScheduler extends Scheduler {
         this.timeQuantum = timeQuantum;
     }
 
-    Record findRecordByPID(ArrayList<Record> records, long PID){
-        for(Record record : records){
-            if(record.getProcessID() == PID) return record;
+    Record findRecordByPID(ArrayList<Record> records, long PID) {
+        for (Record record : records) {
+            if (record.getProcessID() == PID) return record;
         }
         return null;
     }
@@ -35,14 +35,14 @@ public class RoundRobinScheduler extends Scheduler {
         // Number of finished processes
         int finished = 0;
         // Clearing the Ages and Remaining Times for All Processes
-        for(ProcessContainer process : this.processes){
+        for (ProcessContainer process : this.processes) {
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
         }
         // While there are processes to execute
-        while(finished < this.processes.size()){
+        while (finished < this.processes.size()) {
             // Add new arrival processes to ready queue
-            while(this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime){
+            while (this.processes.size() > cursor && this.processes.get(cursor).getArrivalTime() <= this.currentTime) {
                 // Insert
                 this.readyQueue.add(this.processes.get(cursor));
                 this.processesLog.add(new Record(
@@ -55,16 +55,16 @@ public class RoundRobinScheduler extends Scheduler {
                 cursor++;
             }
             // Return the running process to the queue
-            if(this.runningProcess != null && Double.compare(this.runningProcess.getRemainingTime(), 0) > 0){
+            if (this.runningProcess != null && Double.compare(this.runningProcess.getRemainingTime(), 0) > 0) {
                 this.readyQueue.add(runningProcess);
             }
             // Choose the next process to run
-            if(!this.readyQueue.isEmpty()){
+            if (!this.readyQueue.isEmpty()) {
                 this.runningProcess = this.readyQueue.get(0);
                 Record runningRecord = findRecordByPID(this.processesLog, this.runningProcess.getProcessID());
                 runningRecord.setStartTime(Double.min(this.currentTime, runningRecord.getStartTime()));
                 this.readyQueue.remove(0);
-                if(Double.compare(this.runningProcess.getRemainingTime(), this.timeQuantum) <= 0){
+                if (Double.compare(this.runningProcess.getRemainingTime(), this.timeQuantum) <= 0) {
                     this.cpuLog.add(new Quantum(
                             this.runningProcess.getProcessID(),
                             this.currentTime,
@@ -74,7 +74,7 @@ public class RoundRobinScheduler extends Scheduler {
                     this.currentTime += this.runningProcess.getRemainingTime();
                     this.runningProcess.setRemainingTime(0);
                     runningRecord.setFinishTime(this.currentTime);
-                }else{
+                } else {
                     this.runningProcess.setRemainingTime(this.runningProcess.getRemainingTime() - this.timeQuantum);
                     this.cpuLog.add(new Quantum(
                             this.runningProcess.getProcessID(),
@@ -83,7 +83,7 @@ public class RoundRobinScheduler extends Scheduler {
                     ));
                     this.currentTime += this.timeQuantum;
                 }
-            }else{
+            } else {
                 this.currentTime = Math.floor(this.currentTime + 1);
             }
         }

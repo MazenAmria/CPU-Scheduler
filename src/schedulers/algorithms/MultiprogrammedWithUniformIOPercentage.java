@@ -1,6 +1,6 @@
 package schedulers.algorithms;
 
-import schedulers.*;
+import schedulers.Scheduler;
 import schedulers.components.Process;
 import schedulers.components.ProcessContainer;
 import schedulers.components.Quantum;
@@ -25,8 +25,8 @@ public class MultiprogrammedWithUniformIOPercentage extends Scheduler {
         }
     }
 
-    private double share(int numberOfProcesses){
-        return (this.shares[numberOfProcesses - 1])/numberOfProcesses;
+    private double share(int numberOfProcesses) {
+        return (this.shares[numberOfProcesses - 1]) / numberOfProcesses;
     }
 
     @Override
@@ -34,22 +34,22 @@ public class MultiprogrammedWithUniformIOPercentage extends Scheduler {
         // Sort The processes by arrival time
         Collections.sort(this.processes, Comparator.comparing(ProcessContainer::getProcess));
         // Clearing the Ages and Remaining Times for All Processes
-        for(ProcessContainer process : this.processes){
+        for (ProcessContainer process : this.processes) {
             process.setAge(0);
             process.setRemainingTime(process.getTaskDuration());
         }
         int cursor = 0;
         int finished = 0;
-        while(finished < this.processes.size()){
-            if(Double.compare(this.currentTime,Double.NaN) == 0) System.exit(0);
+        while (finished < this.processes.size()) {
+            if (Double.compare(this.currentTime, Double.NaN) == 0) System.exit(0);
             // Add new arrival processes to ready queue (depending on their burst)
-            while(this.processes.size() > cursor && Double.compare(this.processes.get(cursor).getArrivalTime(), this.currentTime) <= 0){
+            while (this.processes.size() > cursor && Double.compare(this.processes.get(cursor).getArrivalTime(), this.currentTime) <= 0) {
                 // Insert
                 this.readyQueue.add(this.processes.get(cursor));
                 cursor++;
             }
             Collections.sort(this.readyQueue, Comparator.comparingDouble(ProcessContainer::getRemainingTime));
-            if(!this.readyQueue.isEmpty()){
+            if (!this.readyQueue.isEmpty()) {
                 if (this.processes.size() > cursor
                         && Double.compare(this.processes.get(cursor).getArrivalTime(), this.currentTime + (this.readyQueue.get(0).getRemainingTime() / share(this.readyQueue.size()))) <= 0) {
                     for (ProcessContainer process : readyQueue) {
@@ -79,7 +79,7 @@ public class MultiprogrammedWithUniformIOPercentage extends Scheduler {
                         finished++;
                     }
                 }
-            }else{
+            } else {
                 this.currentTime = Math.floor(this.currentTime + 1);
             }
         }
