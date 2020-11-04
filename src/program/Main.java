@@ -130,8 +130,8 @@ public class Main extends Application {
                 }
         );
         primaryStage.setScene(new Scene(fileLoadingScreen, 600, 400));
-        primaryStage.widthProperty().addListener(widthListener);
-        primaryStage.heightProperty().addListener(heightListener);
+      //  primaryStage.widthProperty().addListener(widthListener);
+      //  primaryStage.heightProperty().addListener(heightListener);
         primaryStage.show();
     }
 
