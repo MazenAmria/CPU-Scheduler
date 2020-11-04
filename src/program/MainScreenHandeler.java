@@ -11,6 +11,8 @@ import static program.Main.*;
 
 public class MainScreenHandeler {
 
+    private static boolean isPreemptive;
+
     public static void handelMainScreenActions(Pane mainScreen) {
 
         Button firstComeFirstServed = (Button) getElementById(mainScreen, "first_come_first_served");
@@ -72,12 +74,14 @@ public class MainScreenHandeler {
         );
         explicitPriorityWithPreemption.setOnAction(
                 event -> {
-                    setAutoOrUserEntryForPriorityScheduler(autoAgeFactor, ageFactor, true);
+                    MainScreenHandeler.isPreemptive = true;
+                    setAutoOrUserEntryForPriorityScheduler(autoAgeFactor, ageFactor);
                 }
         );
         explicitPriorityWithoutPreemption.setOnAction(
                 event -> {
-                    setAutoOrUserEntryForPriorityScheduler(autoAgeFactor, ageFactor, false);
+                    MainScreenHandeler.isPreemptive = false;
+                    setAutoOrUserEntryForPriorityScheduler(autoAgeFactor, ageFactor);
                 }
         );
         roundRobin.setOnAction(
@@ -150,14 +154,14 @@ public class MainScreenHandeler {
         );
     }
 
-    public static void setAutoOrUserEntryForPriorityScheduler(CheckBox auto, TextField userEnrty, boolean flag) { // flag = true ==> with preemption , else without
+    public static void setAutoOrUserEntryForPriorityScheduler(CheckBox auto, TextField userEnrty) {
         auto.setDisable(false);
         userEnrty.setDisable(false);
         auto.setOnAction(
                 event1 -> {
                     userEnrty.setDisable(true);
                     Scheduler scheduler;
-                    if (flag)
+                    if (MainScreenHandeler.isPreemptive)
                         scheduler = new PreemptiveExplicitPriorityScheduler(processes, findAgeFactor(processes));
                     else
                         scheduler = new NonPreemptiveExplicitPriorityScheduler(processes, findAgeFactor(processes));
@@ -177,7 +181,7 @@ public class MainScreenHandeler {
                 event2 -> {
                     auto.setDisable(true);
                     Scheduler scheduler;
-                    if (flag)
+                    if (MainScreenHandeler.isPreemptive)
                         scheduler = new PreemptiveExplicitPriorityScheduler(processes, Long.parseLong(userEnrty.getText()));
                     else
                         scheduler = new NonPreemptiveExplicitPriorityScheduler(processes, Long.parseLong(userEnrty.getText()));
