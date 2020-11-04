@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -16,6 +17,7 @@ import schedulers.components.Quantum;
 import schedulers.components.Record;
 import schedulers.components.Visualisable;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 public class Result {
@@ -36,6 +38,11 @@ public class Result {
         thread.start();
         // Building and showing the basic UI
         Stage stage = new Stage();
+        try {
+            stage.getIcons().add(new Image("file:icon.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String[] schedulerName = this.scheduler.getClass().getName().split("\\.");
         stage.setTitle(schedulerName[schedulerName.length - 1]);
         AnchorPane result = new AnchorPane();
