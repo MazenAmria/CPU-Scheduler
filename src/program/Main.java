@@ -95,8 +95,6 @@ public class Main extends Application {
                     } catch (Exception e) {
                         processes.clear();
                         // Stop the Operation until a file is entered
-                        /*AlertWindow alert = new AlertWindow();
-                        alert.displayAlertWindow("File Not Found Error" , "You have to include a file to continue");*/
                         (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
                     }
                 }
@@ -115,25 +113,17 @@ public class Main extends Application {
                         } catch (Exception e) {
                             processes.clear();
                             // Stop the Operation until a file is entered
-                            /*AlertWindow alert = new AlertWindow();
-                            alert.displayAlertWindow("File Not Found Error" , "You have to include a file to continue");*/
                             (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
                         }
                     } else {
                         try {
                             readFile(file[0]);
-                            /*primaryStage.widthProperty().removeListener(widthListener);
-                            primaryStage.heightProperty().removeListener(heightListener);
-                            primaryStage.setWidth(782);
-                            primaryStage.setHeight(715);*/
                             primaryStage.setScene(
                                     new Scene(mainScreen, 600, 400)
                             );
                             handelMainScreenActions(mainScreen);
                         } catch (Exception e) {
                             processes.clear();
-                            /*AlertWindow alert = new AlertWindow();
-                            alert.displayAlertWindow("File Not Found Error" , "You have to include a file to continue");*/
                             (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
                         }
                     }
