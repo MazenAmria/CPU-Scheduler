@@ -85,11 +85,11 @@ public class Result {
         String selectedStyle = "-fx-border-color: #F93F40; -fx-border-width: 2px; -fx-border-radius: 3px; -fx-background-color: #7b6d8d;";
         String notSelectedStyle = "-fx-border-width: 0px; -fx-background-color: #7b6d8d;";
         ToggleButton processes = (ToggleButton) Main.getElementById(choose, "processes");
-        processes.setSelected(true);
-        processes.setStyle(selectedStyle);
+        processes.setSelected(false);
+        processes.setStyle(notSelectedStyle);
         ToggleButton cpu = (ToggleButton) Main.getElementById(choose, "cpu");
-        cpu.setSelected(false);
-        cpu.setStyle(notSelectedStyle);
+        cpu.setSelected(true);
+        cpu.setStyle(selectedStyle);
         HBox scale = (HBox) Main.getElementById(lower, "scale");
         Slider slider = (Slider) Main.getElementById(scale, "slider");
         slider.setMax(4.00);
@@ -148,7 +148,7 @@ public class Result {
             this.beginTime = Double.min(this.beginTime, quantum.getStartTime());
         }
         // Define the intervals to be visulaized...
-        final ArrayList<Visualisable>[] visualisables = new ArrayList[]{scheduler.getProcessesLogVis()};
+        final ArrayList<Visualisable>[] visualisables = new ArrayList[]{scheduler.getCpuLogVis()};
         // Setting the Gantt Chart to fit the intervals...
         ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
         ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
