@@ -119,7 +119,7 @@ public class Main extends Application {
                         try {
                             readFile(file[0]);
                             primaryStage.setScene(
-                                    new Scene(mainScreen, 782, 715)
+                                    new Scene(mainScreen, 600, 400)
                             );
                             handelMainScreenActions(mainScreen);
                         } catch (Exception e) {
@@ -130,8 +130,8 @@ public class Main extends Application {
                 }
         );
         primaryStage.setScene(new Scene(fileLoadingScreen, 600, 400));
-      //  primaryStage.widthProperty().addListener(widthListener);
-      //  primaryStage.heightProperty().addListener(heightListener);
+        primaryStage.widthProperty().addListener(widthListener);
+        primaryStage.heightProperty().addListener(heightListener);
         primaryStage.show();
     }
 
