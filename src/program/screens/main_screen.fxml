@@ -8,30 +8,31 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <ImageView fitHeight="400.0" fitWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <ImageView fitHeight="400.0" fitWidth="600.0">
             <image>
                 <Image url="@../assets/background.jpg" />
             </image>
         </ImageView>
-        <Button fx:id="first_come_first_served" layoutX="120.0" layoutY="75.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="360.0" style="-fx-background-color: #7b6d8d; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="First Come First Served" textFill="WHITE" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="75.0" />
-        <Text fx:id="text1" fill="WHITE" layoutX="104.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="CPU Scheduling Simulator" textAlignment="CENTER" AnchorPane.leftAnchor="104.0" AnchorPane.rightAnchor="104.0" AnchorPane.topAnchor="20.0">
+        <Button fx:id="first_come_first_served" layoutX="120.0" layoutY="75.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="360.0" style="-fx-background-color: #7b6d8d; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="First Come First Served" textFill="WHITE" />
+        <Text fx:id="text1" fill="WHITE" layoutX="104.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="CPU Scheduling Simulator" textAlignment="CENTER">
             <font>
                 <Font name="Eras Demi ITC" size="32.0" />
             </font>
         </Text>
-        <Button fx:id="shortest_job_first" layoutX="120.0" layoutY="115.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="360.0" style="-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Shortest Job First" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="115.0" />
-        <Button fx:id="shortest_remaining_time_first" layoutX="120.0" layoutY="155.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="360.0" style="-fx-background-color: #7b6d8d; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Shortest Remaining Time First" textFill="WHITE" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="155.0" />
-        <Button fx:id="explicit_priority_with_preemption" layoutX="120.0" layoutY="195.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="270.0" style="-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Explicit Priority with Preemption" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="195.0" />
-        <Button fx:id="explicit_priority_without_preemption" layoutX="120.0" layoutY="235.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="270.0" style="-fx-background-color: #7b6d8d; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Explicit Priority without Preemption" textFill="WHITE" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="235.0" />
-        <CheckBox fx:id="auto_time_quantum" layoutX="330.0" layoutY="275.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0); -fx-background-color: #a5c4d4; -fx-padding: 0 5px 0 5px; -fx-background-radius: 3px;" text="auto" AnchorPane.leftAnchor="330.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="275.0" />
-        <Button fx:id="round_robin" layoutX="120.0" layoutY="275.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Round Robin" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="280.0" AnchorPane.topAnchor="275.0" />
-        <Button fx:id="multiprogramming_with_uniform_io_percentage" layoutX="120.0" layoutY="315.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="270.0" style="-fx-background-color: #7b6d8d; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Multiprogramming with Uniform I/O" textFill="WHITE" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="315.0" />
-        <MenuButton fx:id="io_percentage" layoutX="400.0" layoutY="315.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #7b6d8d; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="I/O%" textFill="WHITE" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="315.0">
+        <Button fx:id="shortest_job_first" layoutX="120.0" layoutY="115.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="360.0" style="-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Shortest Job First" />
+        <Button fx:id="shortest_remaining_time_first" layoutX="120.0" layoutY="155.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="360.0" style="-fx-background-color: #7b6d8d; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Shortest Remaining Time First" textFill="WHITE" />
+        <Button fx:id="explicit_priority_with_preemption" layoutX="120.0" layoutY="195.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="270.0" style="-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Explicit Priority with Preemption" />
+        <Button fx:id="explicit_priority_without_preemption" layoutX="120.0" layoutY="235.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="270.0" style="-fx-background-color: #7b6d8d; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Explicit Priority without Preemption" textFill="WHITE" />
+        <CheckBox fx:id="auto_time_quantum" layoutX="330.0" layoutY="275.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0); -fx-background-color: #a5c4d4; -fx-padding: 0 5px 0 5px; -fx-background-radius: 3px;" text="auto" />
+        <Button fx:id="round_robin" layoutX="120.0" layoutY="275.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Round Robin" />
+        <Button fx:id="multiprogramming_with_uniform_io_percentage" layoutX="120.0" layoutY="315.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="270.0" style="-fx-background-color: #7b6d8d; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Multiprogramming with Uniform I/O" textFill="WHITE"  />
+        <MenuButton fx:id="io_percentage" layoutX="400.0" layoutY="315.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #7b6d8d; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="I/O%" textFill="WHITE">
             <items>
                 <MenuItem fx:id="twenty_percent" mnemonicParsing="false" text="20" />
                 <MenuItem fx:id="fifty_percent" mnemonicParsing="false" text="50" />
@@ -39,9 +40,9 @@
                 <MenuItem fx:id="ninety_percent" mnemonicParsing="false" text="90" />
             </items>
         </MenuButton>
-        <TextField fx:id="age_factor" layoutX="400.0" layoutY="195.0" prefHeight="30.0" prefWidth="80.0" promptText="ageFactor" style="-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0); -fx-prompt-text-fill: black;" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="195.0" />
-        <CheckBox fx:id="auto_age_factor" layoutX="400.0" layoutY="235.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0); -fx-padding: 0 15px 0 15px; -fx-background-radius: 3px; -fx-background-color: #7b6d8d;" text="auto" textFill="WHITE" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="235.0" />
-          <TextField fx:id="time_quantum" layoutX="400.0" layoutY="275.0" prefHeight="30.0" prefWidth="80.0" promptText="timeQuantum" style="-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0); -fx-prompt-text-fill: black;" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="275.0" />
-        <Button fx:id="exit" layoutX="520.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: #F93F40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Exit" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="520.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="350.0" />
+        <TextField fx:id="age_factor" layoutX="400.0" layoutY="195.0" prefHeight="30.0" prefWidth="80.0" promptText="ageFactor" style="-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0); -fx-prompt-text-fill: black;" />
+        <CheckBox fx:id="auto_age_factor" layoutX="400.0" layoutY="235.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0); -fx-padding: 0 15px 0 15px; -fx-background-radius: 3px; -fx-background-color: #7b6d8d;" text="auto" textFill="WHITE" />
+        <TextField fx:id="time_quantum" layoutX="400.0" layoutY="275.0" prefHeight="30.0" prefWidth="80.0" promptText="timeQuantum" style="-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0); -fx-prompt-text-fill: black;" />
+        <Button fx:id="exit" layoutX="520.0" layoutY="350.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: #F93F40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);" text="Exit" textFill="WHITE" />
     </children>
-</AnchorPane>
+</Pane>
