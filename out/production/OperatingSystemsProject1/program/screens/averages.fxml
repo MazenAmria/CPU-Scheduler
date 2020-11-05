@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <VBox fx:id="avarages" prefHeight="400.0" prefWidth="250.0" spacing="30.0" style="-fx-background-color: #8499b1;"
-      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+      xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml">
     <children>
         <VBox fx:id="averages" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
             <children>
