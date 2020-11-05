@@ -68,7 +68,7 @@ public class Result {
         AnchorPane.setBottomAnchor(scrollPane, 0.0);
         result.getChildren().add(scrollPane);
         result.widthProperty().addListener((observableValue, number, t1) -> {
-            AnchorPane.setRightAnchor(averages, t1.doubleValue() * 650 / 900);
+            AnchorPane.setRightAnchor(container, t1.doubleValue() * 650 / 900);
             AnchorPane.setLeftAnchor(scrollPane, t1.doubleValue() * 250 / 900);
         });
         // Defining the averages...
@@ -239,7 +239,6 @@ public class Result {
     }
 
     private void setGrid(Pane ganttChart) {
-        double maxHeight = 0;
         double l = Math.ceil(this.beginTime);
         double r = Double.max(Math.floor(this.finalTime), Math.floor((this.screenWidth * 650 / 900 - 10) / (20 * this.hScale)));
         while (Double.compare(l, r) <= 0) {
