@@ -18,6 +18,8 @@ import schedulers.components.Process;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,6 +48,7 @@ public class Main extends Application {
         primaryStage.setResizable(true);
         Button loadFile = (Button) getElementById(fileLoadingScreen, "load_file");
         Button browse = (Button) getElementById(fileLoadingScreen, "browse");
+        Button generateFileAutomatically = (Button) getElementById(fileLoadingScreen,"generate_file_automatically");
         TextField fileName = (TextField) getElementById(fileLoadingScreen, "file_name");
         Button exit = (Button) getElementById(fileLoadingScreen, "exit");
         exit.setOnAction(actionEvent -> {
@@ -80,6 +83,11 @@ public class Main extends Application {
                     file[0] = fileChooser.showOpenDialog(primaryStage);
                     if (file[0] != null)
                         fileName.setText(file[0].getAbsolutePath());
+                }
+        );
+        generateFileAutomatically.setOnAction(
+                e -> {
+                    generateFileAutomatically(fileName);
                 }
         );
         fileName.setOnAction(
@@ -119,7 +127,7 @@ public class Main extends Application {
                         try {
                             readFile(file[0]);
                             primaryStage.setScene(
-                                    new Scene(mainScreen, 600, 400)
+                                    new Scene(mainScreen, 782, 715)
                             );
                             handelMainScreenActions(mainScreen);
                         } catch (Exception e) {
@@ -130,8 +138,8 @@ public class Main extends Application {
                 }
         );
         primaryStage.setScene(new Scene(fileLoadingScreen, 600, 400));
-        primaryStage.widthProperty().addListener(widthListener);
-        primaryStage.heightProperty().addListener(heightListener);
+        //  primaryStage.widthProperty().addListener(widthListener);
+        //  primaryStage.heightProperty().addListener(heightListener);
         primaryStage.show();
     }
 
@@ -144,6 +152,25 @@ public class Main extends Application {
                     Double.parseDouble(fields[2]), Long.parseLong(fields[3]), Long.parseLong(fields[4]),
                     Long.parseLong(fields[5].trim()));
             processes.add(process);
+        }
+    }
+
+
+    public static void generateFileAutomatically(TextField fileName){
+        int numberOfLines = (int)(5 + Math.random() * (21 - 5 ))  ; // generate a number n ==>  5<=n<=30
+        try {
+            FileWriter fw = new FileWriter("auto_data.txt");
+            for(int i=0 ; i<numberOfLines ; i++) {
+                long pID = i ; // unique
+                double arrivalTime = (int)(Math.random() * (numberOfLines + 10)) ; // 0 ->  numberOfLines + 9
+                double burstTime = (int)(1 + Math.random() * (numberOfLines - 1)); // 1-> numberOfLines-1
+                fw.write(pID + "," + arrivalTime + "," + burstTime + ",0,0,0\n");
+            }
+            fw.close();
+            fileName.setText("auto_data.txt"); // i may emove .txt from here
+        } catch (IOException e) {
+            processes.clear();
+            (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
         }
     }
 
