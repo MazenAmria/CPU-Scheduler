@@ -18,6 +18,7 @@ import schedulers.components.Record;
 import schedulers.components.Visualisable;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Result {
@@ -56,6 +57,7 @@ public class Result {
         AnchorPane.setBottomAnchor(container, 0.0);
         result.getChildren().add(container);
         VBox averages = (VBox) Main.getElementById(container, "averages");
+        Button showTable = (Button) Main.getElementById(container,"show_table");
         // Gantt Chart Panel...
         Pane ganttChart = FXMLLoader.load(getClass().getResource("screens/gantt_chart.fxml"));
         ganttChart.setStyle("-fx-background-color: #FFFFFF;");
@@ -172,6 +174,7 @@ public class Result {
                 map(ganttChart, v);
             }
         });
+
         value.setOnAction(actionEvent -> {
             this.hScale = Double.parseDouble(value.getText());
             slider.setValue(this.hScale);
@@ -215,6 +218,21 @@ public class Result {
                 map(ganttChart, v);
             }
         });
+
+
+
+
+        showTable.setOnAction(actionEvent ->{
+            ResultedTable res = new ResultedTable();
+            try {
+                res.showTable(scheduler);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+
         // Defining a Dynamic Layout...
         result.widthProperty().addListener((observableValue, number, t1) -> {
             this.screenWidth = t1.doubleValue();
