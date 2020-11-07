@@ -66,7 +66,8 @@ public class ResultedTable {
        /* TableColumn<Record, Double> burstTimeCol = new TableColumn<Record, Double>("BurstTime");
         burstTimeCol.setMinWidth(75); burstTimeCol.setPrefWidth(90);
         burstTimeCol.setCellValueFactory(new PropertyValueFactory<Record, Double>("BurstTime")); */
-
+        
+        Collections.sort(scheduler.getProcessesLog(), Comparator.comparingDouble(Record::getProcessID));
         ObservableList<Record> data = FXCollections.observableArrayList(scheduler.getProcessesLog());
 
         table.setItems(data);
