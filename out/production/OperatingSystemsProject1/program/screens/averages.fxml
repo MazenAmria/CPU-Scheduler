@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <VBox fx:id="avarages" prefHeight="400.0" prefWidth="250.0" spacing="30.0" style="-fx-background-color: #8499b1;"
-      xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml">
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox fx:id="averages" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
             <children>
@@ -69,6 +69,8 @@
                 </HBox>
             </children>
         </VBox>
+        <Button fx:id="show_table" mnemonicParsing="false" style="-fx-background-color: #7b6d8d;"
+                text="Show The Resulted Table " textFill="WHITE"/>
     </children>
     <padding>
         <Insets bottom="30.0" left="10.0" right="10.0" top="30.0"/>

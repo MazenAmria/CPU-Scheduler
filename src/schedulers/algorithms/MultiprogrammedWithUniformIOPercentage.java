@@ -12,21 +12,18 @@ import java.util.Comparator;
 import java.util.InputMismatchException;
 
 public class MultiprogrammedWithUniformIOPercentage extends Scheduler {
-    private final double[] shares;
+    private final double IOPercentage;
 
-    public MultiprogrammedWithUniformIOPercentage(ArrayList<Process> processes, int IOPercentage) {
+    public MultiprogrammedWithUniformIOPercentage(ArrayList<Process> processes, double IOPercentage) throws InputMismatchException {
         super(processes);
-        switch (IOPercentage) {
-            case 20 -> this.shares = new double[]{0.8, 0.96, 0.992, 0.9984, 0.99968, 0.999936};
-            case 50 -> this.shares = new double[]{0.5, 0.75, 0.875, 0.9375, 0.96875, 0.984375};
-            case 80 -> this.shares = new double[]{0.2, 0.36, 0.448, 0.5904, 0.67232, 0.737856};
-            case 90 -> this.shares = new double[]{0.1, 0.19, 0.271, 0.3439, 0.40951, 0.468559};
-            default -> throw new InputMismatchException();
-        }
+        if (Double.compare(IOPercentage, 100.0) == 0)
+            throw new InputMismatchException("IO Percentage should be less than 100.0 or processes will never be processed or ended!");
+        this.IOPercentage = IOPercentage / 100.0;
     }
 
     private double share(int numberOfProcesses) {
-        return (this.shares[numberOfProcesses - 1]) / numberOfProcesses;
+        if (numberOfProcesses == 0) return 0;
+        return (1 - Math.pow(IOPercentage, numberOfProcesses));
     }
 
     @Override

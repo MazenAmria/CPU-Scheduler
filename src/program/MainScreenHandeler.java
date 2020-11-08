@@ -1,7 +1,7 @@
 package program;
 
-import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import schedulers.Scheduler;
 import schedulers.algorithms.*;
@@ -25,7 +25,8 @@ public class MainScreenHandeler {
         TextField ageFactor = (TextField) getElementById(mainScreen, "age_factor");
         CheckBox autoTimeQuantum = (CheckBox) getElementById(mainScreen, "auto_time_quantum");
         CheckBox autoAgeFactor = (CheckBox) getElementById(mainScreen, "auto_age_factor");
-        MenuButton IO = (MenuButton) getElementById(mainScreen, "io_percentage");
+        Spinner IO = (Spinner) getElementById(mainScreen, "io_percentage");
+        IO.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, 100.0, 50.0, 0.1));
         Button exit = (Button) getElementById(mainScreen, "exit");
         exit.setOnAction(actionEvent -> {
             System.exit(0);
@@ -94,24 +95,29 @@ public class MainScreenHandeler {
                     IO.setDisable(false);
                 }
         );
-
-        ObservableList<MenuItem> items = IO.getItems();
-        items.forEach((item) -> {
-                    item.setOnAction(
-                            event2 -> {
-                                IO.setDisable(true);
-                                int IOPercent = Integer.parseInt(item.getText());
-                                Scheduler multiprogrammedWithUniformIOPercentageScheduler = new MultiprogrammedWithUniformIOPercentage(processes, IOPercent);
-                                Result result = new Result(multiprogrammedWithUniformIOPercentageScheduler);
-                                try {
-                                    result.show();
-                                } catch (Exception e) {
-                                    (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
-                                }
-                            }
-                    );
+        IO.getEditor().textProperty().addListener((observableValue, s, t1) -> {
+            try {
+                Double.parseDouble(t1);
+            } catch (Exception e) {
+                if (t1.compareTo("") == 0)
+                    IO.getEditor().setText("0");
+                else
+                    IO.getEditor().setText(s);
+            }
+        });
+        IO.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().compareTo(KeyCode.ENTER) == 0) {
+                try {
+                    double IOPercent = Double.parseDouble(IO.getEditor().getText());
+                    Scheduler multiprogrammedWithUniformIOPercentageScheduler = new MultiprogrammedWithUniformIOPercentage(processes, IOPercent);
+                    Result result = new Result(multiprogrammedWithUniformIOPercentageScheduler);
+                    result.show();
+                    IO.setDisable(true);
+                } catch (Exception e) {
+                    (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
                 }
-        );
+            }
+        });
 
 
     }

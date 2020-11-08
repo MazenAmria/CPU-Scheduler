@@ -20,10 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Scanner;
+import java.util.*;
 
 import static program.MainScreenHandeler.handelMainScreenActions;
 
@@ -48,7 +45,7 @@ public class Main extends Application {
         primaryStage.setResizable(true);
         Button loadFile = (Button) getElementById(fileLoadingScreen, "load_file");
         Button browse = (Button) getElementById(fileLoadingScreen, "browse");
-        Button generateFileAutomatically = (Button) getElementById(fileLoadingScreen,"generate_file_automatically");
+        Button generateFileAutomatically = (Button) getElementById(fileLoadingScreen, "generate_file_automatically");
         TextField fileName = (TextField) getElementById(fileLoadingScreen, "file_name");
         Button exit = (Button) getElementById(fileLoadingScreen, "exit");
         exit.setOnAction(actionEvent -> {
@@ -86,8 +83,18 @@ public class Main extends Application {
                 }
         );
         generateFileAutomatically.setOnAction(
-                e -> {
+                event -> {
                     generateFileAutomatically(fileName);
+                    try {
+                        primaryStage.setScene(
+                                new Scene(mainScreen, 600, 400)
+                        );
+                        handelMainScreenActions(mainScreen);
+                    } catch (Exception e) {
+                        processes.clear();
+                        // Stop the Operation until a file is entered
+                        (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
+                    }
                 }
         );
         fileName.setOnAction(
@@ -138,8 +145,8 @@ public class Main extends Application {
                 }
         );
         primaryStage.setScene(new Scene(fileLoadingScreen, 600, 400));
-        //  primaryStage.widthProperty().addListener(widthListener);
-        //  primaryStage.heightProperty().addListener(heightListener);
+        primaryStage.widthProperty().addListener(widthListener);
+        primaryStage.heightProperty().addListener(heightListener);
         primaryStage.show();
     }
 
@@ -156,18 +163,26 @@ public class Main extends Application {
     }
 
 
-    public static void generateFileAutomatically(TextField fileName){
-        int numberOfLines = (int)(5 + Math.random() * (21 - 5 ))  ; // generate a number n ==>  5<=n<=30
+    public static void generateFileAutomatically(TextField fileName) {
+        // More than 40 process would be exhaustive, less than 5 would be meaningless
+        int numberOfLines = (int) (5 + Math.random() * (41 - 5)); // generate a number n: 5 <= n <= 40
         try {
-            FileWriter fw = new FileWriter("auto_data.txt");
-            for(int i=0 ; i<numberOfLines ; i++) {
-                long pID = i ; // unique
-                double arrivalTime = (int)(Math.random() * (numberOfLines + 10)) ; // 0 ->  numberOfLines + 9
-                double burstTime = (int)(1 + Math.random() * (numberOfLines - 1)); // 1-> numberOfLines-1
+            FileWriter fw = new FileWriter("auto_generated");
+            Integer[] arr = new Integer[numberOfLines];
+            for (int i = 0; i < numberOfLines; i++) arr[i] = i;
+            List<Integer> temp = Arrays.asList(arr);
+            Collections.shuffle(temp);
+            temp.toArray(arr);
+            for (int i = 0; i < numberOfLines; i++) {
+                long pID = arr[i]; // unique
+                // processes with burstTime larger than 40 will take more time to simulate and would occupy a wider chart
+                double arrivalTime = Math.floor(Math.random() * 41); // arrivalTime <= 40.0 (floor is just to make numbers easier to read and deal with)
+                double burstTime = Math.floor(1 + Math.random() * 41); // burstTime <= 40.0 (floor is just to make numbers easier to read and deal with)
                 fw.write(pID + "," + arrivalTime + "," + burstTime + ",0,0,0\n");
+                processes.add(new Process(pID, arrivalTime, burstTime, 0, 0, 0));
             }
             fw.close();
-            fileName.setText("auto_data.txt"); // i may emove .txt from here
+            fileName.setText("auto_generated");
         } catch (IOException e) {
             processes.clear();
             (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();

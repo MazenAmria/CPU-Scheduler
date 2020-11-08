@@ -17,7 +17,6 @@ import schedulers.components.Quantum;
 import schedulers.components.Record;
 import schedulers.components.Visualisable;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -57,7 +56,7 @@ public class Result {
         AnchorPane.setBottomAnchor(container, 0.0);
         result.getChildren().add(container);
         VBox averages = (VBox) Main.getElementById(container, "averages");
-        Button showTable = (Button) Main.getElementById(container,"show_table");
+        Button showTable = (Button) Main.getElementById(container, "show_table");
         // Gantt Chart Panel...
         Pane ganttChart = FXMLLoader.load(getClass().getResource("screens/gantt_chart.fxml"));
         ganttChart.setStyle("-fx-background-color: #FFFFFF;");
@@ -155,10 +154,10 @@ public class Result {
         ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
         ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
         // Visualize...
-        setGrid(ganttChart);
         for (Visualisable v : visualisables[0]) {
             map(ganttChart, v);
         }
+        setGrid(ganttChart);
         // Changing the Scale...
         slider.setOnMouseDragged(mouseEvent -> {
             this.hScale = slider.getValue();
@@ -169,10 +168,10 @@ public class Result {
             ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
             ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
             // Visualize...
-            setGrid(ganttChart);
             for (Visualisable v : visualisables[0]) {
                 map(ganttChart, v);
             }
+            setGrid(ganttChart);
         });
 
         value.setOnAction(actionEvent -> {
@@ -184,10 +183,10 @@ public class Result {
             ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
             ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
             // Visualize...
-            setGrid(ganttChart);
             for (Visualisable v : visualisables[0]) {
                 map(ganttChart, v);
             }
+            setGrid(ganttChart);
         });
         // Setting the Logic of the Toggle Buttons...
         processes.setOnAction(actionEvent -> {
@@ -199,10 +198,10 @@ public class Result {
             ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
             ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
             ganttChart.getChildren().clear();
-            setGrid(ganttChart);
             for (Visualisable v : visualisables[0]) {
                 map(ganttChart, v);
             }
+            setGrid(ganttChart);
         });
         cpu.setOnAction(actionEvent -> {
             cpu.setSelected(true);
@@ -213,16 +212,14 @@ public class Result {
             ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
             ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
             ganttChart.getChildren().clear();
-            setGrid(ganttChart);
             for (Visualisable v : visualisables[0]) {
                 map(ganttChart, v);
             }
+            setGrid(ganttChart);
         });
 
 
-
-
-        showTable.setOnAction(actionEvent ->{
+        showTable.setOnAction(actionEvent -> {
             ResultedTable res = new ResultedTable();
             try {
                 res.showTable(scheduler);
@@ -232,44 +229,49 @@ public class Result {
         });
 
 
-
         // Defining a Dynamic Layout...
         result.widthProperty().addListener((observableValue, number, t1) -> {
             this.screenWidth = t1.doubleValue();
             ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
             ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
             ganttChart.getChildren().clear();
-            setGrid(ganttChart);
             for (Visualisable v : visualisables[0]) {
                 map(ganttChart, v);
             }
+            setGrid(ganttChart);
         });
         result.heightProperty().addListener((observableValue, number, t1) -> {
             this.screenHeight = t1.doubleValue();
             ganttChart.setPrefHeight(Double.max(this.screenHeight - 10, (this.vScale * 30 + 5) * scheduler.numOfProcesses + 5));
             ganttChart.setPrefWidth(Double.max(this.screenWidth * 650 / 900 - 10, this.finalTime * this.hScale * 20 + 10));
             ganttChart.getChildren().clear();
-            setGrid(ganttChart);
             for (Visualisable v : visualisables[0]) {
                 map(ganttChart, v);
             }
+            setGrid(ganttChart);
         });
     }
 
     private void setGrid(Pane ganttChart) {
-        double l = Math.ceil(this.beginTime);
-        double r = Double.max(Math.floor(this.finalTime), Math.floor((this.screenWidth * 650 / 900 - 10) / (20 * this.hScale)));
+        double gridScale = this.hScale;
+        if (Double.compare(this.hScale, 0.5) < 0) {
+            gridScale *= 10;
+        }
+        double l = 0.0;
+        double r = Double.max(Math.floor(this.finalTime), Math.floor((this.screenWidth * 650 / 900 + 20) / (20 * this.hScale)));
         while (Double.compare(l, r) <= 0) {
-            Line line = new Line(l * 20 * this.hScale + 5, 0, l * 20 * this.hScale + 5, this.screenHeight + 20);
+            Line line = new Line(l * 20 * gridScale + 5, 0, l * 20 * gridScale + 5, Double.max(this.screenHeight + 20, ganttChart.getPrefHeight()));
             line.setStrokeWidth(0.25);
             ganttChart.getChildren().add(line);
+            line.toBack();
             l++;
         }
         int y = 0;
-        while (Double.compare((this.vScale * 30 + 5) * y + 2.5, this.screenHeight - 10) <= 0) {
+        while (Double.compare((this.vScale * 30 + 5) * y + 2.5, Double.max(this.screenHeight + 20, ganttChart.getPrefHeight())) <= 0) {
             Line line = new Line(0, (this.vScale * 30 + 5) * y + 2.5, r * 20 * this.hScale + 20, (this.vScale * 30 + 5) * y + 2.5);
             line.setStrokeWidth(0.1);
             ganttChart.getChildren().add(line);
+            line.toBack();
             y++;
         }
     }

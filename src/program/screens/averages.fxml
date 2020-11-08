@@ -1,74 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
-<VBox fx:id="avarages" prefHeight="400.0" prefWidth="250.0" spacing="30.0" style="-fx-background-color: #8499b1;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="avarages" prefHeight="400.0" prefWidth="250.0" spacing="30.0" style="-fx-background-color: #8499b1;"
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox fx:id="averages" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
             <children>
                 <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Averages">
                     <font>
-                        <Font name="Eras Demi ITC" size="25.0" />
+                        <Font name="Eras Demi ITC" size="25.0"/>
                     </font>
                 </Text>
                 <GridPane fx:id="grid" prefHeight="204.0" prefWidth="230.0" vgap="10.0">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.0" minWidth="10.0" prefWidth="139.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="77.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.0" minWidth="10.0" prefWidth="139.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="77.0"/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <Label text="Starting Time:" textFill="WHITE" />
-                        <Label text="Finish Time:" textFill="WHITE" GridPane.rowIndex="1" />
-                        <Label text="Arrival Time:" textFill="WHITE" GridPane.rowIndex="2" />
-                        <Label text="Duration (Burst):" textFill="WHITE" GridPane.rowIndex="3" />
-                        <Label text="Turn Around:" textFill="WHITE" GridPane.rowIndex="4" />
-                        <Label text="Weighted Turn Around:" textFill="WHITE" GridPane.rowIndex="5" />
-                        <Label text="Waiting Time:" textFill="WHITE" GridPane.rowIndex="6" />
+                        <Label text="Starting Time:" textFill="WHITE"/>
+                        <Label text="Finish Time:" textFill="WHITE" GridPane.rowIndex="1"/>
+                        <Label text="Arrival Time:" textFill="WHITE" GridPane.rowIndex="2"/>
+                        <Label text="Duration (Burst):" textFill="WHITE" GridPane.rowIndex="3"/>
+                        <Label text="Turn Around:" textFill="WHITE" GridPane.rowIndex="4"/>
+                        <Label text="Weighted Turn Around:" textFill="WHITE" GridPane.rowIndex="5"/>
+                        <Label text="Waiting Time:" textFill="WHITE" GridPane.rowIndex="6"/>
                     </children>
                 </GridPane>
             </children>
         </VBox>
         <VBox fx:id="lower" prefHeight="68.0" prefWidth="230.0" spacing="10.0">
             <children>
-                <HBox fx:id="choose" prefHeight="34.0" prefWidth="230.0" spacing="10.0" style="-fx-alignment: center-left;">
+                <HBox fx:id="choose" prefHeight="34.0" prefWidth="230.0" spacing="10.0"
+                      style="-fx-alignment: center-left;">
                     <children>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Display: " wrappingWidth="57.13671875">
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Display: "
+                              wrappingWidth="57.13671875">
                             <font>
-                                <Font size="15.0" />
+                                <Font size="15.0"/>
                             </font>
                         </Text>
-                        <ToggleButton fx:id="processes" mnemonicParsing="false" style="-fx-background-color: #7b6d8d;" text="Processes" textFill="WHITE" />
-                        <ToggleButton fx:id="cpu" mnemonicParsing="false" style="-fx-background-color: #7b6d8d;" text="CPU" textFill="WHITE" />
+                        <ToggleButton fx:id="processes" mnemonicParsing="false" style="-fx-background-color: #7b6d8d;"
+                                      text="Processes" textFill="WHITE"/>
+                        <ToggleButton fx:id="cpu" mnemonicParsing="false" style="-fx-background-color: #7b6d8d;"
+                                      text="CPU" textFill="WHITE"/>
                     </children>
                 </HBox>
-                <HBox fx:id="scale" prefHeight="9.0" prefWidth="230.0" spacing="10.0" style="-fx-alignment: center-left;">
+                <HBox fx:id="scale" prefHeight="9.0" prefWidth="230.0" spacing="10.0"
+                      style="-fx-alignment: center-left;">
                     <children>
-                        <Label text="Scale:" textFill="WHITE" />
-                        <Slider fx:id="slider" prefHeight="14.0" prefWidth="124.0" />
-                        <TextField fx:id="value" prefHeight="25.0" prefWidth="45.0" style="-fx-background-color: #a5c4d4;" />
+                        <Label text="Scale:" textFill="WHITE"/>
+                        <Slider fx:id="slider" prefHeight="14.0" prefWidth="124.0"/>
+                        <TextField fx:id="value" prefHeight="25.0" prefWidth="45.0"
+                                   style="-fx-background-color: #a5c4d4;"/>
                     </children>
                 </HBox>
             </children>
         </VBox>
-      <Button fx:id="show_table" mnemonicParsing="false" style="-fx-background-color: #7b6d8d;" text="Show The Resulted Table " textFill="WHITE" />
+        <Button fx:id="show_table" mnemonicParsing="false" style="-fx-background-color: #7b6d8d;"
+                text="Show The Resulted Table " textFill="WHITE"/>
     </children>
     <padding>
-        <Insets bottom="30.0" left="10.0" right="10.0" top="30.0" />
+        <Insets bottom="30.0" left="10.0" right="10.0" top="30.0"/>
     </padding>
 </VBox>
