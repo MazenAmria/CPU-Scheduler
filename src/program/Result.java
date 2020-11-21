@@ -13,12 +13,16 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import schedulers.Scheduler;
+import schedulers.components.Process;
 import schedulers.components.Quantum;
 import schedulers.components.Record;
 import schedulers.components.Visualisable;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
+
+import static program.Main.processes;
 
 public class Result {
     private final Scheduler scheduler;
@@ -72,6 +76,7 @@ public class Result {
             AnchorPane.setRightAnchor(container, t1.doubleValue() * 650 / 900);
             AnchorPane.setLeftAnchor(scrollPane, t1.doubleValue() * 250 / 900);
         });
+
         // Defining the averages...
         double startTime = 0;
         double finishTime = 0;
@@ -83,6 +88,8 @@ public class Result {
         // Toggle Buttons...
         VBox lower = (VBox) Main.getElementById(container, "lower");
         HBox choose = (HBox) Main.getElementById(lower, "choose");
+        HBox hboxForCPUUsage = (HBox) Main.getElementById(lower,"hbox_cpu_usage");
+        Text cpuUsage = (Text) Main.getElementById(hboxForCPUUsage,"cpu_usage");
         String selectedStyle = "-fx-border-color: #F93F40; -fx-border-width: 2px; -fx-border-radius: 3px; -fx-background-color: #7b6d8d;";
         String notSelectedStyle = "-fx-border-width: 0px; -fx-background-color: #7b6d8d;";
         ToggleButton processes = (ToggleButton) Main.getElementById(choose, "processes");
@@ -218,6 +225,7 @@ public class Result {
             setGrid(ganttChart);
         });
 
+        cpuUsage.setText((findCPUUsage(scheduler.getCpuLog())*100) + "%");
 
         showTable.setOnAction(actionEvent -> {
             ResultedTable res = new ResultedTable();
@@ -310,4 +318,22 @@ public class Result {
         // Adding all to the Gantt Chart...
         ganttChart.getChildren().add(rectangle);
     }
+
+
+    public static double findCPUUsage(ArrayList<Quantum> processes1){
+        double cpuWorkTime = 0 ;
+        double MaxFinishTime = Double.MIN_VALUE;
+        double MinStartTime = Double.MAX_VALUE;
+        for(Process p : processes){
+            cpuWorkTime += p.getTaskDuration();
+        }
+        for(Quantum p : processes1){
+            MaxFinishTime = Double.max(MaxFinishTime , p.getFinishTime());
+            MinStartTime = Double.min(MinStartTime, p.getStartTime());
+        }
+
+        return (cpuWorkTime / (MaxFinishTime-MinStartTime));
+    }
+
+
 }
