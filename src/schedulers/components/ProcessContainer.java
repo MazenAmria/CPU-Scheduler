@@ -3,9 +3,9 @@ package schedulers.components;
 public class ProcessContainer {
     private final Process process;
     private double remainingTime;
-    private long age;
+    private double age;
 
-    public ProcessContainer(Process process, double remainingTime, long age) {
+    public ProcessContainer(Process process, double remainingTime, double age) {
         this.process = process;
         this.remainingTime = remainingTime;
         this.age = age;
@@ -23,15 +23,19 @@ public class ProcessContainer {
         this.remainingTime = remainingTime;
     }
 
-    public long getAge() {
+    public double getAge() {
         return age;
     }
 
-    public void setAge(long age) {
+    public void setAge(double age) {
         this.age = age;
     }
 
-    public long getPriority() {
+    public void incrementAge(double ageFactor) {
+        this.age += ageFactor;
+    }
+
+    public double getPriority() {
         return this.process.getProcessID() - this.getAge();
     }
 

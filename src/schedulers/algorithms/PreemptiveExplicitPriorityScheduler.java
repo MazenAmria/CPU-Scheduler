@@ -11,9 +11,9 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class PreemptiveExplicitPriorityScheduler extends Scheduler {
-    private final long ageFactor;
+    private final double ageFactor;
 
-    public PreemptiveExplicitPriorityScheduler(ArrayList<Process> processes, long ageFactor) {
+    public PreemptiveExplicitPriorityScheduler(ArrayList<Process> processes, double ageFactor) {
         super(processes);
         this.ageFactor = ageFactor;
     }
@@ -54,7 +54,7 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
                 cursor++;
             }
             // Sort
-            Collections.sort(this.readyQueue, Comparator.comparingLong(ProcessContainer::getPriority));
+            Collections.sort(this.readyQueue, Comparator.comparingDouble(ProcessContainer::getPriority));
             if (!readyQueue.isEmpty()) {
                 // Making progress in the process
                 this.readyQueue.get(0).setRemainingTime(this.readyQueue.get(0).getRemainingTime() - 1);
@@ -73,7 +73,7 @@ public class PreemptiveExplicitPriorityScheduler extends Scheduler {
                 }
                 // Incrementing the Age for all processes
                 for (ProcessContainer process : this.readyQueue) {
-                    process.setAge(process.getAge() + this.ageFactor);
+                    process.incrementAge(this.ageFactor);
                 }
                 // Reset the age of the running process
                 this.readyQueue.get(0).setAge(0);

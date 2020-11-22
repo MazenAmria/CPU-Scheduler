@@ -16,14 +16,14 @@ public class MultiprogrammedWithUniformIOPercentage extends Scheduler {
 
     public MultiprogrammedWithUniformIOPercentage(ArrayList<Process> processes, double IOPercentage) throws InputMismatchException {
         super(processes);
-        if (Double.compare(IOPercentage, 100.0) == 0)
-            throw new InputMismatchException("IO Percentage should be less than 100.0 or processes will never be processed or ended!");
+        if (Double.compare(IOPercentage, 100.0) >= 0 || Double.compare(IOPercentage, 0.0) < 0)
+            throw new InputMismatchException("IO Percentage should be less than 100.0 and more than or equal 0\nor processes will never be processed or ended!");
         this.IOPercentage = IOPercentage / 100.0;
     }
 
     private double share(int numberOfProcesses) {
         if (numberOfProcesses == 0) return 0;
-        return (1 - Math.pow(IOPercentage, numberOfProcesses));
+        return (1 - Math.pow(IOPercentage, numberOfProcesses)) / numberOfProcesses;
     }
 
     @Override

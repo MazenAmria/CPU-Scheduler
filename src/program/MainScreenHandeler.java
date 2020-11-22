@@ -1,8 +1,12 @@
 package program;
 
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
 import schedulers.Scheduler;
 import schedulers.algorithms.*;
 
@@ -13,7 +17,6 @@ public class MainScreenHandeler {
     private static boolean isPreemptive;
 
     public static void handelMainScreenActions(Pane mainScreen) {
-
         Button firstComeFirstServed = (Button) getElementById(mainScreen, "first_come_first_served");
         Button shortestJobFirst = (Button) getElementById(mainScreen, "shortest_job_first");
         Button shortestRemainingTimeFirst = (Button) getElementById(mainScreen, "shortest_remaining_time_first");
@@ -28,9 +31,15 @@ public class MainScreenHandeler {
         Spinner IO = (Spinner) getElementById(mainScreen, "io_percentage");
         IO.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, 100.0, 50.0, 0.1));
         Button exit = (Button) getElementById(mainScreen, "exit");
+        Region returnButton = (Region) getElementById(mainScreen, "return_button");
         exit.setOnAction(actionEvent -> {
             System.exit(0);
         });
+        SVGPath returnSVG = new SVGPath();
+        returnSVG.setContent("M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zm28.9-143.6L209.4 288H392c13.3 0 24-10.7 24-24v-16c0-13.3-10.7-24-24-24H209.4l75.5-72.4c9.7-9.3 9.9-24.8.4-34.3l-11-10.9c-9.4-9.4-24.6-9.4-33.9 0L107.7 239c-9.4 9.4-9.4 24.6 0 33.9l132.7 132.7c9.4 9.4 24.6 9.4 33.9 0l11-10.9c9.5-9.5 9.3-25-.4-34.3z");
+        returnButton.setStyle("-fx-background-color: #a5c4d4; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.3, 0, 0);");
+        returnButton.setShape(returnSVG);
+        returnButton.setOnMouseClicked(mouseEvent -> Main.returnToFileLoading());
 
         timeQuantum.setDisable(true);
         autoTimeQuantum.setDisable(true);

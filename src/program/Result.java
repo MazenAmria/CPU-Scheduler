@@ -331,7 +331,6 @@ public class Result {
             MaxFinishTime = Double.max(MaxFinishTime , p.getFinishTime());
             MinStartTime = Double.min(MinStartTime, p.getStartTime());
         }
-
         return (cpuWorkTime / (MaxFinishTime-MinStartTime));
     }
 

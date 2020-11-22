@@ -27,6 +27,8 @@ import static program.MainScreenHandeler.handelMainScreenActions;
 public class Main extends Application {
 
     public static ArrayList<Process> processes = new ArrayList<>();
+    private static Stage stage;
+    private static Scene fileLoadingScene;
 
     public static Node getElementById(Pane pane, String id) {
         for (Node node : pane.getChildren()) {
@@ -39,8 +41,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        stage = primaryStage;
         Pane fileLoadingScreen = FXMLLoader.load(getClass().getResource("screens/file_loading_screen.fxml"));
         Pane mainScreen = FXMLLoader.load(getClass().getResource("screens/main_screen.fxml"));
+        fileLoadingScene = new Scene(fileLoadingScreen, 600, 400);
+        Scene mainScene = new Scene(mainScreen, 600, 400);
+        handelMainScreenActions(mainScreen);
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setResizable(true);
         Button loadFile = (Button) getElementById(fileLoadingScreen, "load_file");
@@ -87,9 +93,8 @@ public class Main extends Application {
                     generateFileAutomatically(fileName);
                     try {
                         primaryStage.setScene(
-                                new Scene(mainScreen, 600, 400)
+                                mainScene
                         );
-                        handelMainScreenActions(mainScreen);
                     } catch (Exception e) {
                         processes.clear();
                         // Stop the Operation until a file is entered
@@ -104,9 +109,8 @@ public class Main extends Application {
                         file[0] = new File(fileName.getText());
                         readFile(file[0]);
                         primaryStage.setScene(
-                                new Scene(mainScreen, 600, 400)
+                                mainScene
                         );
-                        handelMainScreenActions(mainScreen);
                     } catch (Exception e) {
                         processes.clear();
                         // Stop the Operation until a file is entered
@@ -122,9 +126,8 @@ public class Main extends Application {
                             file[0] = new File(fileName.getText());
                             readFile(file[0]);
                             primaryStage.setScene(
-                                    new Scene(mainScreen, 600, 400)
+                                    mainScene
                             );
-                            handelMainScreenActions(mainScreen);
                         } catch (Exception e) {
                             processes.clear();
                             // Stop the Operation until a file is entered
@@ -134,9 +137,8 @@ public class Main extends Application {
                         try {
                             readFile(file[0]);
                             primaryStage.setScene(
-                                    new Scene(mainScreen, 782, 715)
+                                    mainScene
                             );
-                            handelMainScreenActions(mainScreen);
                         } catch (Exception e) {
                             processes.clear();
                             (new Alert(Alert.AlertType.ERROR, e.getMessage())).show();
@@ -144,14 +146,19 @@ public class Main extends Application {
                     }
                 }
         );
-        primaryStage.setScene(new Scene(fileLoadingScreen, 600, 400));
+        primaryStage.setScene(fileLoadingScene);
         primaryStage.widthProperty().addListener(widthListener);
         primaryStage.heightProperty().addListener(heightListener);
         primaryStage.show();
     }
 
+    public static void returnToFileLoading() {
+        stage.setScene(fileLoadingScene);
+    }
+
     private void readFile(File file) throws FileNotFoundException {
         Scanner sc = new Scanner(file);
+        processes.clear();
         while (sc.hasNext()) {
             String line = sc.nextLine();
             String[] fields = line.split(",");
@@ -200,13 +207,18 @@ public class Main extends Application {
         return timeQuantum;
     }
 
-    public static long findAgeFactor(ArrayList<Process> processes) {
-        long MaxPID = Long.MIN_VALUE, MinPID = Long.MAX_VALUE;
+    public static double findAgeFactor(ArrayList<Process> processes) {
+        double sumOfPIDs = 0.0;
         for (Process process : processes) {
-            MaxPID = Long.max(MaxPID, process.getProcessID());
-            MinPID = Long.min(MinPID, process.getProcessID());
+            sumOfPIDs += process.getProcessID();
         }
-        return (MaxPID - MinPID) / processes.size();
+        double average = sumOfPIDs / processes.size();
+        double sumOfSquaredDiff = 0.0;
+        for (Process process : processes) {
+            sumOfSquaredDiff += ((process.getProcessID() - average) * (process.getProcessID() - average));
+        }
+        double variance = sumOfSquaredDiff / processes.size();
+        return Math.sqrt(variance);
     }
 
 
