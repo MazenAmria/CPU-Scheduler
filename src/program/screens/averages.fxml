@@ -67,7 +67,7 @@
             <HBox fx:id="hbox_cpu_usage" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                <children>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="CPU Usage % :" />
-                  <Text fx:id="cpu_usage" lineSpacing="20.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                  <Text fx:id="cpu_usage" fill="WHITE" lineSpacing="20.0" strokeType="OUTSIDE" strokeWidth="0.0" />
                </children>
             </HBox>
             </children>
