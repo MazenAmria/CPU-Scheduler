@@ -21,7 +21,7 @@ import static program.Main.getElementById;
 
 public class ResultedTable {
 
-    public void showTable(Scheduler scheduler) throws IOException {
+    public void showTable(Scheduler scheduler, String schedulerName) throws IOException {
         Pane anchorPane = FXMLLoader.load(getClass().getResource("screens/process_table_screen.fxml"));
 
         TableView<Record> table = (TableView) getElementById(anchorPane, "table");
@@ -84,7 +84,7 @@ public class ResultedTable {
             e.printStackTrace();
         }
 
-        stage.setTitle("The Resulted Table");
+        stage.setTitle(schedulerName + " Table");
         stage.setScene(new Scene(anchorPane, 650, 400));
         stage.show();
 
