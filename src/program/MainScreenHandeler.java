@@ -15,6 +15,8 @@ import static program.Main.*;
 public class MainScreenHandeler {
 
     private static boolean isPreemptive;
+    static double TimeQuantum =0 ;
+    static double AgeFactor = 0 ;
 
     public static void handelMainScreenActions(Pane mainScreen) {
         Button firstComeFirstServed = (Button) getElementById(mainScreen, "first_come_first_served");
@@ -134,10 +136,12 @@ public class MainScreenHandeler {
     public static void setAutoOrUserEntryForRoundRobinScheduler(CheckBox auto, TextField userEnrty) {
         auto.setDisable(false);
         userEnrty.setDisable(false);
+
         auto.setOnAction(
                 event1 -> {
                     userEnrty.setDisable(true);
-                    Scheduler roundRobinScheduler = new RoundRobinScheduler(processes, findTimeQuantum(processes));
+                    TimeQuantum = findTimeQuantum(processes);
+                    Scheduler roundRobinScheduler = new RoundRobinScheduler(processes, TimeQuantum);
                     Result result = new Result(roundRobinScheduler);
                     try {
                         result.show();
@@ -153,6 +157,7 @@ public class MainScreenHandeler {
         userEnrty.setOnAction( // enter
                 event2 -> {
                     auto.setDisable(true);
+                    TimeQuantum = Double.parseDouble(userEnrty.getText());
                     Scheduler roundRobinScheduler = new RoundRobinScheduler(processes, Double.parseDouble(userEnrty.getText()));
                     Result result = new Result(roundRobinScheduler);
                     try {
@@ -174,10 +179,14 @@ public class MainScreenHandeler {
                 event1 -> {
                     userEnrty.setDisable(true);
                     Scheduler scheduler;
-                    if (MainScreenHandeler.isPreemptive)
+                    if (MainScreenHandeler.isPreemptive) {
+                        AgeFactor = findAgeFactor(processes);
                         scheduler = new PreemptiveExplicitPriorityScheduler(processes, findAgeFactor(processes));
-                    else
+                    }
+                    else {
+                        AgeFactor = findAgeFactor(processes);
                         scheduler = new NonPreemptiveExplicitPriorityScheduler(processes, findAgeFactor(processes));
+                    }
                     Result result = new Result(scheduler);
                     try {
                         result.show();
@@ -194,10 +203,14 @@ public class MainScreenHandeler {
                 event2 -> {
                     auto.setDisable(true);
                     Scheduler scheduler;
-                    if (MainScreenHandeler.isPreemptive)
+                    if (MainScreenHandeler.isPreemptive) {
+                        AgeFactor = Long.parseLong(userEnrty.getText());
                         scheduler = new PreemptiveExplicitPriorityScheduler(processes, Long.parseLong(userEnrty.getText()));
-                    else
+                    }
+                    else {
+                        AgeFactor = Long.parseLong(userEnrty.getText());
                         scheduler = new NonPreemptiveExplicitPriorityScheduler(processes, Long.parseLong(userEnrty.getText()));
+                    }
                     Result result = new Result(scheduler);
                     try {
                         result.show();
