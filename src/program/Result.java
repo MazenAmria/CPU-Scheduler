@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static program.Main.getElementById;
 import static program.Main.processes;
 
 public class Result {
@@ -89,6 +90,9 @@ public class Result {
         VBox lower = (VBox) Main.getElementById(container, "lower");
         HBox choose = (HBox) Main.getElementById(lower, "choose");
         HBox hboxForCPUUsage = (HBox) Main.getElementById(lower,"hbox_cpu_usage");
+        HBox HBox4 = (HBox)Main.getElementById(lower,"hbox4");
+        Label label1 = (Label) Main.getElementById(HBox4,"label1");
+        Label label2 = (Label) Main.getElementById(HBox4,"label2");
         Text cpuUsage = (Text) Main.getElementById(hboxForCPUUsage,"cpu_usage");
         String selectedStyle = "-fx-border-color: #F93F40; -fx-border-width: 2px; -fx-border-radius: 3px; -fx-background-color: #7b6d8d;";
         String notSelectedStyle = "-fx-border-width: 0px; -fx-background-color: #7b6d8d;";
@@ -148,6 +152,18 @@ public class Result {
         Text tx7 = new Text(String.format("%.2f", waitTime));
         tx7.setFill(Color.WHITE);
         avgs.add(tx7, 1, 6);
+
+
+        if(schedulerName[schedulerName.length - 1].contains("RoundRobinScheduler") == true ) {
+            label1.setText("Time Quantum : ");
+            label2.setText(MainScreenHandeler.TimeQuantum + "");
+        }
+        if(schedulerName[schedulerName.length - 1].contains("PreemptiveExplicitPriorityScheduler") == true || schedulerName[schedulerName.length - 1].contains("NonPreemptiveExplicitPriorityScheduler") == true ){
+            label1.setText("Age Factor : ");
+            label2.setText(MainScreenHandeler.AgeFactor + "");
+        }
+
+
         // Calculate time interval...
         this.finalTime = 0;
         this.beginTime = Double.MAX_VALUE;
@@ -230,7 +246,7 @@ public class Result {
         showTable.setOnAction(actionEvent -> {
             ResultedTable res = new ResultedTable();
             try {
-                res.showTable(scheduler);
+                res.showTable(scheduler,schedulerName[schedulerName.length -1]);
             } catch (IOException e) {
                 e.printStackTrace();
             }
