@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="avarages" prefHeight="400.0" prefWidth="250.0" spacing="30.0" style="-fx-background-color: #8499b1;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="avarages" prefHeight="400.0" prefWidth="250.0" spacing="20.0" style="-fx-background-color: #8499b1;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox fx:id="averages" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
             <children>
@@ -68,6 +68,12 @@
                <children>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="CPU Usage % :" />
                   <Text fx:id="cpu_usage" fill="WHITE" lineSpacing="20.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="hbox4" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label fx:id="label1" textFill="WHITE" />
+                  <Label fx:id="label2" textFill="WHITE" />
                </children>
             </HBox>
             </children>
